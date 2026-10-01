@@ -31,7 +31,7 @@ async function avecServeur(f) {
 // L'équipe de chaque personne, d'après GET /api/employes.
 const equipes = async (get) => Object.fromEntries((await get('/api/employes')).donnees.map((e) => [e.id, e.team]));
 
-test("les présents : les postes réservés ce jour-là par mes collègues d'équipe, moi exclu", { todo: 'Carte C : retirez ce todo quand la carte est réalisée' }, async () => {
+test("les présents : les postes réservés ce jour-là par mes collègues d'équipe, moi exclu", async () => {
   await avecServeur(async (get) => {
     const equipe = await equipes(get);
     for (const [employe, jour] of CAS) {
@@ -50,7 +50,7 @@ test("les présents : les postes réservés ce jour-là par mes collègues d'éq
   });
 });
 
-test("le poste conseillé est libre, dans la zone de l'équipe quand il en reste un", { todo: 'Carte C : retirez ce todo quand la carte est réalisée' }, async () => {
+test("le poste conseillé est libre, dans la zone de l'équipe quand il en reste un", async () => {
   await avecServeur(async (get) => {
     const equipe = await equipes(get);
     const plan = (await get('/api/plan')).donnees;
@@ -69,7 +69,7 @@ test("le poste conseillé est libre, dans la zone de l'équipe quand il en reste
   });
 });
 
-test('une personne inconnue donne 404', { todo: 'Carte C : retirez ce todo quand la carte est réalisée' }, async () => {
+test('une personne inconnue donne 404', async () => {
   await avecServeur(async (get) => {
     assert.equal((await get('/api/equipe?employe=e001&jour=2026-10-07')).statut, 200);
     assert.equal((await get('/api/equipe?employe=e999&jour=2026-10-07')).statut, 404);

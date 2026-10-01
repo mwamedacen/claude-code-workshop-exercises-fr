@@ -7,6 +7,7 @@ import { dessinerPlan } from './plan.js';
 import { afficherPanneau, panneauVide } from './panneau.js';
 import { afficherMesReservations } from './liste.js';
 import { demanderSalleLibre } from './salle-libre.js';
+import { afficherEquipe } from './equipe.js';
 
 const app = {
   async chargerJour() {
@@ -24,6 +25,7 @@ const app = {
   },
   async choisirJour(jour) {
     etat.jourChoisi = jour;
+    etat.equipe = null;
     afficherJours(app);
     await app.chargerJour();
   },
@@ -33,6 +35,7 @@ const app = {
   },
   afficherMesReservations: () => afficherMesReservations(app),
   demanderSalleLibre: () => demanderSalleLibre(app),
+  afficherEquipe: () => afficherEquipe(app),
 };
 
 async function demarrage() {

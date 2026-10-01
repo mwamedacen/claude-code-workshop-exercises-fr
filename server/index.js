@@ -144,6 +144,34 @@ export async function demarrer(options = {}) {
         return json(res, 200, lignes);
       }
 
+      if (req.method === 'GET' && p === '/api/equipe') {
+        // Carte C : où est assise mon équipe ce jour-là, et un poste libre conseillé près d'elle.
+        const moi = db.prepare('SELECT id, team FROM employees WHERE id = ?').get(url.searchParams.get('employe') || '');
+        if (!moi) return json(res, 404, { erreur: 'Personne inconnue.' });
+        const jour = jourDepuis(url.searchParams.get('jour')) || cleDuJour(maintenant());
+        const reserves = db
+          .prepare(
+            `SELECT r.ressource, r.employe_id, e.first_name, e.last_name, e.team
+             FROM reservations r JOIN employees e ON e.id = r.employe_id
+             WHERE r.type = 'poste' AND r.jour = ?`,
+          )
+          .all(jour);
+        const presents = reserves
+          .filter((r) => r.team === moi.team && r.employe_id !== moi.id)
+          .map((r) => ({ poste: r.ressource, qui: `${r.first_name} ${r.last_name[0]}.` }));
+        const position = (id) => plan.postes.find((x) => x.id === id);
+        const zone = plan.zones.find((z) => z.id === moi.team);
+        const reperes = presents.map((x) => position(x.poste)).filter(Boolean);
+        const centre = reperes.length
+          ? { x: reperes.reduce((s, x) => s + x.x, 0) / reperes.length, y: reperes.reduce((s, x) => s + x.y, 0) / reperes.length }
+          : { x: zone.x + zone.w / 2, y: zone.y + zone.h / 2 };
+        const pris = new Set(reserves.map((r) => r.ressource));
+        const distance = (x) => (x.x - centre.x) ** 2 + (x.y - centre.y) ** 2;
+        const libres = plan.postes.filter((x) => !pris.has(x.id)).sort((a, b) => distance(a) - distance(b));
+        const conseil = (libres.find((x) => x.zone === moi.team) || libres[0] || null)?.id ?? null;
+        return json(res, 200, { equipe: moi.team, presents, conseil });
+      }
+
       if (req.method === 'GET' && p === '/api/reservations') {
         const jour = url.searchParams.get('jour') || cleDuJour(maintenant());
         const lignes = db
