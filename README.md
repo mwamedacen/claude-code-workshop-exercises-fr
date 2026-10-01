@@ -1,57 +1,57 @@
-# Ma Place — workshop repo
+# Ma Place — repo des ateliers
 
-Ma Place is a fictional flex-office app: you book a desk for the day or a meeting room on a floor plan. You improve it across the Claude Code labs. All people, `@ma-place.example` addresses, and usage data are fictional. The app's UI labels remain in French.
+Ma Place est une application fictive de flex office : vous réservez un poste pour la journée ou une salle de réunion sur un plan. Vous l'améliorerez au fil des ateliers Claude Code. Les personnes, les adresses `@ma-place.example` et les données d'utilisation sont fictives.
 
-## Before the course
+## Avant la formation
 
-1. Install Node.js with `node:sqlite`, Git, GitHub CLI (`gh`), Chrome or Edge, Python, VS Code with the Claude Code and Jupyter extensions, and Claude Code connected to your Claude plan. `npm run check -- setup` reports the minimum versions needed by the repo's scripts.
-2. On this repo's GitHub page, choose **Use this template**, then **Create a new repository** to make your own repo. A private repo is fine. Avoid **Fork**: a pull request could target the course repo. Clone your copy with `git clone <your repo URL>` and open that folder.
-3. Run `npm run check -- setup`. Each ✘ tells you what to install or fix. Run it again on the morning of the course.
-4. Prepare Python for lab 4 with `npm run python`. It creates `.venv` in your repo and installs pandas, matplotlib, ipykernel, and nbconvert. Select the `.venv` kernel in VS Code. You can do this during a break; the first download takes time.
-5. Run `npm start`, then open the address it prints (starting at `http://localhost:3000`, or the first free port).
+1. Installez Node.js avec `node:sqlite`, Git, GitHub CLI (`gh`), Chrome ou Edge, Python, VS Code avec les extensions Claude Code et Jupyter, ainsi que Claude Code connecté à votre abonnement. `npm run check -- setup` indique les versions minimales requises par les scripts du repo.
+2. Sur [la page GitHub du modèle](https://github.com/mwamedacen/claude-code-training-fr), choisissez **Use this template**, puis **Create a new repository** pour créer votre propre repo. Il peut être privé. Évitez **Fork** : une pull request pourrait alors viser le repo de la formation. Clonez votre copie avec `git clone <URL de votre repo>` et ouvrez ce dossier.
+3. Lancez `npm run check -- setup`. Chaque ✘ indique un élément à installer ou à corriger. Relancez la commande le matin de la formation.
+4. Préparez Python pour l'atelier 4 avec `npm run python`. La commande crée `.venv` dans votre repo et installe pandas, matplotlib, ipykernel et nbconvert. Sélectionnez le kernel `.venv` dans VS Code. Vous pouvez le faire pendant une pause : le premier téléchargement peut prendre du temps.
+5. Lancez `npm start`, puis ouvrez l'adresse affichée (à partir de `http://localhost:3000`, ou le premier port libre).
 
-The Node app has no npm dependencies to install. Its demonstration SQLite database is created on first start. The September usage database in `analytics/` is separate and is read only for lab 4.
+L'application Node n'a aucune dépendance npm à installer. Sa base SQLite de démonstration est créée au premier démarrage. La base d'utilisation de septembre, dans `analytics/`, est distincte et ne sert qu'à l'atelier 4.
 
-## Day 1 labs
+## Ateliers du jour 1
 
-| After block | Lab | Guide |
+| Après le bloc | Atelier | Guide |
 |---|---|---|
-| 1 | 1 · The missing buttons (35 min) | [W1](ateliers/W1.md) |
-| 2 | 2 · Something is broken (55 min) | [W2](ateliers/W2.md) |
-| 3 | 3 · Rules, a feature, a new look (70 min) | [W3](ateliers/W3.md) |
-| 4 | 4 · What the data says (56 min) | [W4](ateliers/W4.md) |
+| 1 | 1 · Les boutons manquants (35 min) | [W1](ateliers/W1.md) |
+| 2 | 2 · Ça ne marche pas (55 min) | [W2](ateliers/W2.md) |
+| 3 | 3 · Les règles, une fonction, un nouveau look (70 min) | [W3](ateliers/W3.md) |
+| 4 | 4 · Ce que disent les données (56 min) | [W4](ateliers/W4.md) |
 
-Each guide gives a mission, steps, visible checks, and several levels for people who finish early. [BACKLOG.md](BACKLOG.md) has more cards. If Claude notices a defect outside the current step, write it down and stay with the lab's goal.
+Chaque guide donne une mission, des étapes, des vérifications visibles et plusieurs niveaux pour avancer si vous finissez tôt. [BACKLOG.md](BACKLOG.md) propose d'autres cartes. Si Claude repère un défaut hors de l'étape en cours, notez-le et restez sur l'objectif de l'atelier.
 
 ## Checkpoints
 
-The course repo has a `reference` branch and tags. Your repo made with **Use this template** may not include those tags: the `checkpoint` command fetches them from the course repo when needed. It first saves your work on a `sauvegarde-…` branch, then starts a new work branch at the requested point.
+Le repo de la formation possède une branche `reference` et des tags. Votre repo créé avec **Use this template** peut ne pas contenir ces tags : la commande `checkpoint` les récupère depuis le repo de la formation si nécessaire. Elle sauvegarde d'abord votre travail sur une branche `sauvegarde-…`, puis crée une branche de travail au point demandé.
 
-| Point | Reference state |
+| Point | État de référence |
 |---|---|
-| `w1-depart` | App without the four booking buttons |
-| `w2-depart` | Four buttons (end of lab 1) |
-| `w2-correctif` | Playwright and the first defect fixed with a test |
-| `w3-depart` | Five defects fixed (end of lab 2) |
-| `w3-regles` | Project rules in CLAUDE.md |
-| `w3-fonction` | “Salle libre maintenant” feature |
-| `w4-depart` | New UI and “charte” skill (end of lab 3) |
-| `w4-analyses` | Subagent, data skill, notebook, and backlog cards (end of lab 4) |
+| `w1-depart` | Application sans les quatre boutons de réservation |
+| `w2-depart` | Quatre boutons (fin de l'atelier 1) |
+| `w2-correctif` | Playwright et premier défaut corrigé avec un test |
+| `w3-depart` | Cinq défauts corrigés (fin de l'atelier 2) |
+| `w3-regles` | Règles du projet dans CLAUDE.md |
+| `w3-fonction` | Fonction « Salle libre maintenant » |
+| `w4-depart` | Nouvelle interface et skill « charte » (fin de l'atelier 3) |
+| `w4-analyses` | Sous-agent, skill de données, notebook et cartes du backlog (fin de l'atelier 4) |
 
-- `npm run checkpoint -- list`: list available checkpoints.
-- `npm run checkpoint -- w3-fonction`: save your state and resume at this point.
-- `npm run check -- w3-fonction`: verify the machine-checkable parts of your work.
+- `npm run checkpoint -- list` : afficher les checkpoints disponibles.
+- `npm run checkpoint -- w3-fonction` : sauvegarder votre état et reprendre à ce point.
+- `npm run check -- w3-fonction` : vérifier les éléments contrôlables de votre travail.
 
-`/rewind` acts inside a Claude Code session; repo checkpoints change Git files. They are separate mechanisms.
+`/rewind` agit dans une session Claude Code ; les checkpoints du repo changent les fichiers Git. Ce sont deux mécanismes distincts.
 
-## Useful commands
+## Commandes utiles
 
-- `npm start`: start the app. `npm start -- --maintenant 2026-10-07T14:05` sets a fixed clock for time-dependent exercises.
-- `npm test`: run app tests.
-- `npm run reset`: remove the demonstration database; the next app start recreates it.
-- `npm run python`: prepare `.venv` for the notebook.
-- `npm run check -- setup`: check your machine before the course.
-- `npm run check -- <point>`: check a lab result.
-- `npm run checkpoint -- <point>`: resume from a reference after saving work.
+- `npm start` : démarrer l'application. `npm start -- --maintenant 2026-10-07T14:05` fixe l'heure pour les exercices qui en dépendent.
+- `npm test` : lancer les tests de l'application.
+- `npm run reset` : supprimer la base de démonstration ; le prochain démarrage la recrée.
+- `npm run python` : préparer `.venv` pour le notebook.
+- `npm run check -- setup` : vérifier votre machine avant la formation.
+- `npm run check -- <point>` : vérifier le résultat d'un atelier.
+- `npm run checkpoint -- <point>` : reprendre depuis une référence après sauvegarde.
 
-The floor plan belongs to the fictional Facilities team: the labs fix code without editing `data/floor-plan.json`. These exercises do not use the Ambient IT logo.
+Le plan des locaux appartient à l'équipe Facilities fictive : corrigez le code sans modifier `data/floor-plan.json`. Ces exercices n'utilisent pas le logo Ambient IT.
