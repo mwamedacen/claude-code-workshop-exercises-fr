@@ -13,6 +13,9 @@
     "reset": "node tools/reset.mjs",
     "python": "node tools/setup-python.mjs",
     "check": "node --disable-warning=ExperimentalWarning tools/check.mjs",
-    "checkpoint": "node tools/checkpoint.mjs"
+    "checkpoint": "node tools/checkpoint.mjs",
+    "sabotage": "node tools/sabotage.mjs",
+    "qa:commande": "node qa/commande.mjs",
+    "qa:programme": "node qa/agent-qa.mjs"
   }
 }

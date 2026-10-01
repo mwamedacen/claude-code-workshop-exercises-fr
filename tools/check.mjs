@@ -766,6 +766,392 @@ const FOUR_DATA_CARDS = {
   },
 };
 
+// ---------------------------------------------------------------------------
+// Day 2 (W5–W8)
+// ---------------------------------------------------------------------------
+
+// The acceptance tests of BACKLOG.md's cards, one file each under test/acceptation/.
+const ACCEPTANCE = {
+  A: { file: 'test/acceptation/carte-a.test.js', name: 'carte A' },
+  B: { file: 'test/acceptation/carte-b.test.js', name: 'carte B' },
+  C: { file: 'test/acceptation/carte-c.test.js', name: 'carte C' },
+  AB: { file: 'test/acceptation/fusion-a-b.test.js', name: 'test A×B' },
+  D: { file: 'test/acceptation/carte-d.test.js', name: 'carte D' },
+};
+
+// Runs one test file and counts its tests from the TAP report: { missing } or { count, todo, failed, timedOut }.
+// A test still marked todo carries the TAP directive « # TODO » (the word TODO in a test name does not count);
+// a suite line (describe) is skipped, only its tests count.
+async function acceptance(file) {
+  if (!fs.existsSync(path.join(ROOT, file))) return { missing: true };
+  const env = { ...process.env };
+  delete env.NODE_TEST_CONTEXT;
+  const r = await run(process.execPath, ['--disable-warning=ExperimentalWarning', '--test', '--test-reporter=tap', file], { env, timeout: 60_000 });
+  const result = { count: 0, todo: 0, failed: 0, timedOut: r.timedOut };
+  let previous = -1;
+  for (const line of r.stdout.split(/\r?\n/)) {
+    const m = /^(\s*)(not )?ok \d+ - (.*)$/.exec(line);
+    if (!m) continue;
+    const indent = m[1].length;
+    const suite = indent < previous; // printed after its own tests, one level up
+    previous = indent;
+    if (suite) continue;
+    result.count++;
+    if (/(?<!\\)#\s*TODO\b/.test(m[3])) result.todo++;
+    else if (m[2]) result.failed++;
+  }
+  return result;
+}
+
+// true when every test of the card's file is active and passes, else what is missing.
+async function cardDone(key) {
+  const { file, name } = ACCEPTANCE[key];
+  const r = await acceptance(file);
+  if (r.missing) return `${file} absent`;
+  if (r.timedOut) return `${name} : les tests ne se terminent pas`;
+  if (!r.count) return `${name} : aucun test trouvé dans ${file}`;
+  if (r.todo) return `${name} : ${r.todo} test(s) encore en todo`;
+  if (r.failed) return `${name} : ${r.failed} test(s) en échec (node --test ${file})`;
+  return true;
+}
+
+function readSettings(read) {
+  const raw = read('.claude/settings.json');
+  if (raw === null) return '.claude/settings.json absent';
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return ".claude/settings.json n'est pas un JSON valide";
+  }
+}
+
+// The command handlers declared for a hook event, with the matcher of their group.
+function hooksOf(settings, event) {
+  const groups = Array.isArray(settings?.hooks?.[event]) ? settings.hooks[event] : [];
+  return groups.flatMap((g) => (Array.isArray(g?.hooks) ? g.hooks : []).filter((h) => h?.type === 'command' && typeof h.command === 'string').map((h) => ({ ...h, matcher: g.matcher })));
+}
+
+// Does a matcher select this tool? « * », empty or omitted: every tool; letters, digits, _, -, spaces,
+// commas and | only: a list of exact names; anything else: an unanchored regular expression.
+function matches(matcher, tool) {
+  if (matcher === undefined || matcher === '' || matcher === '*') return true;
+  if (typeof matcher !== 'string') return false;
+  if (/^[\w\s,|-]+$/.test(matcher)) return matcher.split(/[|,]/).map((s) => s.trim()).includes(tool);
+  try {
+    return new RegExp(matcher).test(tool);
+  } catch {
+    return false;
+  }
+}
+
+// Does a handler's `if` (one permission rule, e.g. « Edit(data/*.json) ») let it run for an Edit of rel?
+function runsFor(hook, tool, rel) {
+  if (!hook.if) return true;
+  const m = /^\s*([\w*]+)\s*(?:\((.*)\))?\s*$/.exec(String(hook.if));
+  if (!m) return true; // unknown form: run it
+  if (!matches(m[1], tool)) return false;
+  if (m[2] === undefined || m[2] === '' || m[2] === '*') return true;
+  const pattern = m[2].replace(/^\.?\//, '');
+  const regex = pattern
+    .replace(/[.+^${}()|[\]\\]/g, '\\$&')
+    .replaceAll('?', '[^/]')
+    .replaceAll('**/', '\u0000')
+    .replaceAll('**', '\u0001')
+    .replaceAll('*', '[^/]*')
+    .replaceAll('\u0000', '(?:.*/)?')
+    .replaceAll('\u0001', '.*');
+  return new RegExp(`^${regex}$`).test(rel);
+}
+
+// Runs a hook handler as Claude Code would, the event's JSON on stdin and the project as current folder.
+// Exec form (`args` present): command spawned directly, ${CLAUDE_PROJECT_DIR} replaced; shell form otherwise.
+function runHook(hook, input, timeout) {
+  return new Promise((resolve) => {
+    const env = { ...process.env, CLAUDE_PROJECT_DIR: ROOT };
+    delete env.NODE_TEST_CONTEXT;
+    const shell = !Array.isArray(hook.args);
+    const fill = (s) => String(s).replaceAll('${CLAUDE_PROJECT_DIR}', ROOT);
+    let child;
+    try {
+      if (shell) child = spawn(hook.command, { cwd: ROOT, env, shell: true, windowsHide: true });
+      else {
+        const command = /^node(\.exe)?$/i.test(hook.command) ? process.execPath : fill(hook.command);
+        child = spawn(command, hook.args.map(fill), { cwd: ROOT, env, windowsHide: true });
+      }
+    } catch (err) {
+      return resolve({ code: null, stdout: '', stderr: err.message, shell });
+    }
+    children.add(child);
+    let stdout = '';
+    let stderr = '';
+    const timer = setTimeout(() => killTree(child), timeout);
+    child.stdout.on('data', (d) => (stdout += d));
+    child.stderr.on('data', (d) => (stderr += d));
+    child.stdin.on('error', () => {}); // a hook may exit without reading its input
+    child.stdin.end(JSON.stringify(input));
+    const finish = (code, error = '') => {
+      clearTimeout(timer);
+      children.delete(child);
+      resolve({ code, stdout, stderr: stderr + error, shell });
+    };
+    child.on('error', (err) => finish(null, err.message));
+    child.on('close', (code) => finish(code));
+  });
+}
+
+// Did the hook block? Exit code 2, or a JSON answer that denies (PreToolUse) or blocks (Stop).
+function verdict(r) {
+  let json = null;
+  try {
+    json = JSON.parse(r.stdout.trim() || 'null');
+  } catch {
+    /* plain text */
+  }
+  const denied = json?.hookSpecificOutput?.permissionDecision === 'deny' || json?.decision === 'block';
+  const reason = r.stderr.trim() || json?.hookSpecificOutput?.permissionDecisionReason || json?.reason || '';
+  return { blocked: r.code === 2 || denied, reason: reason.split(/\r?\n/)[0] };
+}
+
+const SHELL_FORM = ' (hook en forme shell : préférez "command": "node", "args": [...])';
+
+const WORKTREE_BASE = {
+  label: 'Chaque worktree part de votre commit (worktree.baseRef : "head" dans .claude/settings.json)',
+  run({ read }) {
+    const settings = readSettings(read);
+    if (typeof settings === 'string') return settings;
+    const value = settings?.worktree?.baseRef;
+    return value === 'head' || `worktree.baseRef vaut ${value === undefined ? 'rien' : JSON.stringify(value)} au lieu de "head"`;
+  },
+};
+
+const ACCEPTANCE_TODO = {
+  label: "Les cinq tests d'acceptation sont là, encore en todo (test/acceptation)",
+  timeout: 120_000,
+  async run() {
+    for (const { file, name } of Object.values(ACCEPTANCE)) {
+      const r = await acceptance(file);
+      if (r.missing) return `${file} absent`;
+      if (!r.count) return `${name} : aucun test trouvé dans ${file}`;
+      if (r.todo < r.count) return `${name} : ${r.count - r.todo} test(s) déjà actif(s) sur ${r.count}`;
+    }
+    return true;
+  },
+};
+
+const QA_SDK = {
+  label: "Le SDK de l'agent de recette est installé (qa/node_modules)",
+  run({ exists }) {
+    return exists('qa/node_modules/@anthropic-ai/claude-agent-sdk/package.json') || 'SDK absent : lancez npm ci --prefix qa';
+  },
+};
+
+const BRANCH_PUSHED = {
+  label: 'Votre branche est poussée sur GitHub',
+  run({ git }) {
+    return git(['rev-parse', '--abbrev-ref', '--symbolic-full-name', '@{u}']).code === 0
+      || 'pas de branche distante : lancez git push -u origin HEAD';
+  },
+};
+
+const THREE_BRIEFS = {
+  label: 'Trois briefs commités dans docs/briefs (carte-a.md, carte-b.md, carte-c.md)',
+  run({ exists, git }) {
+    const tracked = git(['ls-files', '--', 'docs/briefs']).out.split(/\r?\n/);
+    for (const card of ['carte-a', 'carte-b', 'carte-c']) {
+      const file = `docs/briefs/${card}.md`;
+      if (!exists(file)) return `${file} absent`;
+      if (!tracked.includes(file)) return `${file} non commité`;
+    }
+    return true;
+  },
+};
+
+const CARD_BRANCHES = {
+  label: 'Une branche par carte (carte-a, carte-b, carte-c)',
+  run({ git }) {
+    for (const card of ['carte-a', 'carte-b', 'carte-c']) {
+      const found = [card, `worktree-${card}`].some((b) => git(['rev-parse', '--verify', '--quiet', `refs/heads/${b}`]).code === 0);
+      if (!found) return `branche ${card} introuvable (ni ${card} ni worktree-${card})`;
+    }
+    return true;
+  },
+};
+
+const CARDS_MERGED = {
+  label: "Cartes A, B et C fusionnées : leurs tests d'acceptation sont actifs et passent",
+  timeout: 120_000,
+  async run() {
+    for (const key of ['A', 'B', 'C']) {
+      const r = await cardDone(key);
+      if (r !== true) return r;
+    }
+    return true;
+  },
+};
+
+const MERGE_A_B = {
+  label: 'Le test A×B est actif et passe (cartes A et B ensemble)',
+  timeout: 60_000,
+  run: () => cardDone('AB'),
+};
+
+const JOURNEYS = {
+  label: 'Trois parcours dans qa/parcours.md, dont une réservation un autre jour',
+  run({ read, day }) {
+    const text = read('qa/parcours.md');
+    if (text === null) return 'qa/parcours.md absent';
+    const headings = (text.match(/^#{2,4}\s+\S/gm) || []).length;
+    const numbered = (text.match(/^\s*\d+[.)]\s+\S/gm) || []).length;
+    const count = Math.max(headings, numbered);
+    if (count < 3) return `${count} parcours trouvé(s) au lieu de 3`;
+    const months = { octobre: 10, novembre: 11, 'décembre': 12 };
+    const today = day.today;
+    const later = [...text.matchAll(/\b(20\d\d)-(\d\d)-(\d\d)\b/g)].some((m) => m[0] > today)
+      || [...text.matchAll(/\b(\d{1,2})(?:er)?\s+(octobre|novembre|décembre)\b/gi)]
+        .some((m) => `2026-${String(months[m[2].toLowerCase()]).padStart(2, '0')}-${m[1].padStart(2, '0')}` > today);
+    const future = later || /demain|autre jour|jour futur|à venir|prochaine?s?\b|J\s*\+\s*[1-9]/i.test(text);
+    return (/réserv/i.test(text) && future) || "aucun parcours ne réserve pour un autre jour qu'aujourd'hui";
+  },
+};
+
+// The `tools` field of a subagent's YAML header: a list, or null when the field is absent.
+function toolsOf(header) {
+  const m = /^tools:[ \t]*(.*)$/m.exec(header);
+  if (!m) return null;
+  const inline = m[1].trim();
+  const items = inline
+    ? inline.replace(/^\[|\]$/g, '').split(',')
+    : header.slice(m.index + m[0].length).split(/\r?\n/).slice(1).map((l) => /^\s*-\s*(.+)$/.exec(l)).filter(Boolean).map((x) => x[1]);
+  return items.map((t) => t.trim().replace(/^['"]|['"]$/g, '').replace(/\(.*$/, '').trim()).filter(Boolean);
+}
+
+const QA_AGENT = {
+  label: "Le sous-agent qa-visiteur a Playwright et ne peut rien modifier (ni Edit, ni Write, ni Bash)",
+  run({ read }) {
+    const text = read('.claude/agents/qa-visiteur.md');
+    if (text === null) return '.claude/agents/qa-visiteur.md absent';
+    const header = /^---\r?\n([\s\S]*?)\r?\n---/.exec(text);
+    if (!header) return 'en-tête --- absent dans qa-visiteur.md';
+    const tools = toolsOf(header[1]);
+    if (!tools || tools.includes('*')) return 'pas de liste tools : le sous-agent reçoit tous les outils';
+    if (!tools.some((t) => /^mcp__playwright/.test(t))) return 'Playwright absent de la liste tools';
+    const forbidden = tools.filter((t) => ['Edit', 'Write', 'Bash'].includes(t));
+    return !forbidden.length || `outil(s) à retirer de tools : ${forbidden.join(', ')}`;
+  },
+};
+
+const QA_REPORT = {
+  label: 'Le programme de recette écrit sa page de rapport (ou le skill relecture-pr existe)',
+  run({ read, exists }) {
+    if (exists('.claude/skills/relecture-pr/SKILL.md')) return true;
+    const code = read('qa/agent-qa.mjs');
+    if (code === null) return 'qa/agent-qa.mjs absent';
+    return (/rapport/.test(code) && /\.html\b/.test(code) && /write/i.test(code))
+      || "qa/agent-qa.mjs n'écrit pas de page qa/rapport/index.html";
+  },
+};
+
+const PLAN_WALL = {
+  label: 'Un hook PreToolUse protège le plan des locaux (data/floor-plan.json refusé, web/style.css accepté)',
+  timeout: 60_000,
+  async run({ read }) {
+    const settings = readSettings(read);
+    if (typeof settings === 'string') return settings;
+    const declared = hooksOf(settings, 'PreToolUse');
+    if (!declared.length) return 'aucun hook PreToolUse dans .claude/settings.json';
+    const edit = (rel) => ({
+      session_id: 'verification', transcript_path: '', cwd: ROOT, permission_mode: 'default', hook_event_name: 'PreToolUse',
+      tool_name: 'Edit', tool_use_id: 'verification',
+      tool_input: { file_path: path.join(ROOT, ...rel.split('/')), old_string: 'a', new_string: 'b', replace_all: false },
+    });
+    const play = async (rel) => {
+      const results = [];
+      for (const hook of declared.filter((h) => matches(h.matcher, 'Edit') && runsFor(h, 'Edit', rel))) {
+        results.push({ ...verdict(await runHook(hook, edit(rel), 15_000)), shell: !Array.isArray(hook.args) });
+      }
+      return results;
+    };
+    const plan = await play('data/floor-plan.json');
+    if (!plan.length) return "aucun hook PreToolUse ne s'applique à l'outil Edit";
+    const shell = plan.some((r) => r.shell) ? SHELL_FORM : '';
+    const blocked = plan.find((r) => r.blocked);
+    if (!blocked) return `une modification de data/floor-plan.json passe${shell}`;
+    if (!blocked.reason) return `le refus ne donne aucune raison à Claude (rien sur stderr)${shell}`;
+    const style = (await play('web/style.css')).find((r) => r.blocked);
+    return !style || `une modification de web/style.css est refusée aussi : ${style.reason || 'sans raison'}${shell}`;
+  },
+};
+
+const TEST_GATE = {
+  label: 'Un hook Stop laisse Claude finir quand les tests passent',
+  timeout: 200_000,
+  async run({ read }) {
+    const settings = readSettings(read);
+    if (typeof settings === 'string') return settings;
+    const declared = hooksOf(settings, 'Stop').filter((h) => !h.if);
+    if (!declared.length) return 'aucun hook Stop dans .claude/settings.json';
+    const input = {
+      session_id: 'verification', transcript_path: '', cwd: ROOT, permission_mode: 'default',
+      hook_event_name: 'Stop', stop_hook_active: false, last_assistant_message: '',
+    };
+    for (const hook of declared) {
+      const r = await runHook(hook, input, 190_000);
+      const shell = Array.isArray(hook.args) ? '' : SHELL_FORM;
+      const { blocked, reason } = verdict(r);
+      if (blocked) return `le hook Stop bloque sur ce repo : ${reason || 'sans raison'}${shell}`;
+      if (r.code !== 0) return `le hook Stop échoue (code ${r.code})${reason ? ` : ${reason}` : ''}${shell}`;
+    }
+    return true;
+  },
+};
+
+const HOOKS_COMMITTED = {
+  label: 'Les hooks sont commités (.claude/settings.json et .claude/hooks)',
+  run({ read, git }) {
+    const settings = readSettings(read);
+    if (typeof settings === 'string') return settings;
+    const tracked = git(['ls-files', '--', '.claude/settings.json', '.claude/hooks']).out.split(/\r?\n/).filter(Boolean);
+    if (!tracked.includes('.claude/settings.json')) return '.claude/settings.json non commité';
+    const words = [...hooksOf(settings, 'PreToolUse'), ...hooksOf(settings, 'Stop')]
+      .flatMap((h) => [h.command, ...(Array.isArray(h.args) ? h.args : [])]).join(' ').replaceAll('\\', '/');
+    const scripts = [...new Set([...words.matchAll(/\.claude\/hooks\/[^\s"'`]+/g)].map((m) => m[0]))];
+    if (!scripts.length) return tracked.some((f) => f.startsWith('.claude/hooks/')) || 'aucun script commité dans .claude/hooks';
+    const missing = scripts.find((s) => !tracked.includes(s));
+    return !missing || `${missing} non commité`;
+  },
+};
+
+const CARD_D_TESTS = {
+  label: "Carte D : ses tests d'acceptation sont actifs et passent",
+  timeout: 60_000,
+  run: () => cardDone('D'),
+};
+
+const CALENDAR = {
+  label: '« Ajouter à mon agenda » donne un fichier text/calendar à Camille et le refuse à Léa',
+  async run({ startApp, day }) {
+    const app = await startApp();
+    const mine = await app.api('GET', '/api/mes-reservations?employe=e001');
+    const rows = Array.isArray(mine.body) ? mine.body : [];
+    const booking = rows.find((r) => r.ressource === 'loire' && r.jour === day.nextThursday) || rows[0];
+    if (!booking) return 'aucune réservation de Camille (e001) trouvée';
+    const get = (who) => fetch(`${app.url}/api/reservations/${booking.id}/agenda.ics?employe=${who}`, { signal: AbortSignal.timeout(10_000) });
+    const own = await get('e001');
+    if (own.status !== 200) return `agenda de Camille : réponse ${own.status} au lieu de 200 (GET /api/reservations/${booking.id}/agenda.ics?employe=e001)`;
+    const type = own.headers.get('content-type') || '';
+    if (!/^text\/calendar/i.test(type)) return `agenda de Camille : type « ${type || 'aucun'} » au lieu de text/calendar`;
+    const other = await get('e003');
+    return other.status === 403 || `la réservation de Camille demandée par Léa (e003) : réponse ${other.status} au lieu de 403`;
+  },
+};
+
+const CARD_D_PLAN = {
+  label: 'Le plan de la carte D est dans docs/carte-D.md',
+  run({ exists }) {
+    return exists('docs/carte-D.md') || 'docs/carte-D.md absent';
+  },
+};
+
 // What a repository shows once the lab before each checkpoint is done.
 // To add a checkpoint: a key named like its tag, and a list of { label (French), run: async (ctx) =>
 // true | false | 'message', timeout? (ms, default 30 s) }. ctx: api, startApp, read, exists, files, git,
@@ -778,15 +1164,14 @@ export const CHECKS = {
   'w3-fonction': [PROJECT_RULES, FREE_ROOM_NOW, FREE_ROOM_TEST, TESTS_PASS],
   'w4-depart': [DESIGN_SKILL, FREE_ROOM_NOW, TESTS_PASS],
   'w4-analyses': [DATA_AGENT, DATA_NOTEBOOK, FOUR_DATA_CARDS, TESTS_PASS],
-  // TODO(lead) 'w5-depart': cards A, B, C in BACKLOG.md, worktree.baseRef in .claude/settings.json.
-  // TODO(lead) 'w6-depart': carte-a, carte-b, carte-c merged (git merge-base --is-ancestor); the three
-  //   features answer through the API; tests green.
-  // TODO(lead) 'w6-commande': .claude/agents/qa-visiteur.md, qa/verdict.schema.json.
-  // TODO(lead) 'w7-depart': qa/agent-qa.mjs and the report page qa/rapport.html (or the rules pass).
-  // TODO(lead) 'w7-mur': a PreToolUse hook (.claude/settings.json + .claude/hooks/*.mjs) that blocks a
-  //   fake edit of data/floor-plan.json fed to it offline.
-  // TODO(lead) 'w8-depart': the Stop hook running npm test, both hooks committed (git ls-files).
-  // TODO(lead) 'final': card D, « Ajouter à mon agenda », and its test.
+  'w5-depart': [WORKTREE_BASE, ACCEPTANCE_TODO, QA_SDK, BRANCH_PUSHED, TESTS_PASS],
+  'w5-fusion': [THREE_BRIEFS, CARD_BRANCHES, TESTS_PASS],
+  'w6-depart': [CARDS_MERGED, MERGE_A_B, TESTS_PASS],
+  'w6-commande': [JOURNEYS, QA_AGENT, TESTS_PASS],
+  'w7-depart': [QA_REPORT, TESTS_PASS],
+  'w7-mur': [PLAN_WALL, TESTS_PASS],
+  'w8-depart': [PLAN_WALL, TEST_GATE, HOOKS_COMMITTED, TESTS_PASS],
+  'final': [CARD_D_TESTS, CALENDAR, CARD_D_PLAN, TESTS_PASS],
 };
 
 // ---------------------------------------------------------------------------

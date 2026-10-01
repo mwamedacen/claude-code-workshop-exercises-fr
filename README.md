@@ -21,6 +21,23 @@ L'application Node n'a aucune dépendance npm à installer. Sa base SQLite de d�
 | 3 | 3 · Les règles, une fonction, un nouveau look (70 min) | [W3](ateliers/W3.md) |
 | 4 | 4 · Ce que disent les données (56 min) | [W4](ateliers/W4.md) |
 
+## Ateliers du jour 2
+
+| Après le bloc | Atelier | Guide | Départ |
+|---|---|---|---|
+| 5 | 5 · Trois fonctions en même temps (60 min) | [W5](ateliers/W5.md) | `w5-depart` |
+| 6 | 6 · L'agent de recette (55 min) | [W6](ateliers/W6.md) | `w6-depart` |
+| 7 | 7 · Une règle devient un mur (55 min) | [W7](ateliers/W7.md) | `w7-depart` |
+| 8 | 8 · Confier une tâche au cloud (10 + 30 min) | [W8](ateliers/W8.md) | `w8-depart` |
+
+**À 09h00**, lancez ces cinq commandes à la racine de votre repo :
+
+- `npm run checkpoint -- w5-depart` : sauvegarde votre travail du jour 1 et charge le départ du jour 2.
+- `npm ci --prefix qa` : installe l'Agent SDK pour l'atelier 6.
+- `git push -u origin HEAD` : publie votre branche de travail sur GitHub, ce qu'exige l'atelier 8.
+- `npm run check -- w5-depart` : vérifie le départ du jour 2.
+- `claude --cloud "Lance npm test et dis combien de tests passent. Ne modifie rien."` : teste la connexion GitHub, votre abonnement et Node dans le cloud. Si la commande signale GitHub, lancez `/web-setup` dans une session Claude (il utilise votre `gh`). Si elle échoue encore, signalez-le : vous ferez l'atelier 8 en binôme.
+
 Chaque guide donne une mission, des étapes, des vérifications visibles et plusieurs niveaux pour avancer si vous finissez tôt. [BACKLOG.md](BACKLOG.md) propose d'autres cartes. Si Claude repère un défaut hors de l'étape en cours, notez-le et restez sur l'objectif de l'atelier.
 
 ## Checkpoints
@@ -37,6 +54,14 @@ Le repo de la formation possède une branche `reference` et des tags. Votre repo
 | `w3-fonction` | Fonction « Salle libre maintenant » |
 | `w4-depart` | Nouvelle interface et skill « charte » (fin de l'atelier 3) |
 | `w4-analyses` | Sous-agent, skill de données, notebook et cartes du backlog (fin de l'atelier 4) |
+| `w5-depart` | Départ du jour 2 : les cartes A à D, un test d'acceptation en attente par carte, l'agent de recette à brancher |
+| `w5-fusion` | Trois briefs ; la commande crée aussi les branches `carte-a`, `carte-b` et `carte-c`, prêtes à fusionner |
+| `w6-depart` | Cartes A, B et C fusionnées, test A×B actif (fin de l'atelier 5) |
+| `w6-commande` | Trois parcours de recette et le sous-agent `qa-visiteur` |
+| `w7-depart` | Programme Agent SDK et page de rapport (fin de l'atelier 6) |
+| `w7-mur` | Hook `PreToolUse` qui protège le plan des locaux |
+| `w8-depart` | Verrou `Stop` sur les tests, les deux hooks commités (fin de l'atelier 7) |
+| `final` | Carte D, « Ajouter à mon agenda » (fin de l'atelier 8) |
 
 - `npm run checkpoint -- list` : afficher les checkpoints disponibles.
 - `npm run checkpoint -- w3-fonction` : sauvegarder votre état et reprendre à ce point.
@@ -50,6 +75,8 @@ Le repo de la formation possède une branche `reference` et des tags. Votre repo
 - `npm test` : lancer les tests de l'application.
 - `npm run reset` : supprimer la base de démonstration ; le prochain démarrage la recrée.
 - `npm run python` : préparer `.venv` pour le notebook.
+- `npm run sabotage` : introduire une régression volontaire pour l'atelier 6 ; `npm run sabotage -- --annuler` la retire.
+- `npm run qa:commande` et `npm run qa:programme` : lancer l'agent de recette par `claude -p` ou par l'Agent SDK. Si l'application n'est pas sur `http://localhost:3000`, ajoutez `-- --url <adresse>`.
 - `npm run check -- setup` : vérifier votre machine avant la formation.
 - `npm run check -- <point>` : vérifier le résultat d'un atelier.
 - `npm run checkpoint -- <point>` : reprendre depuis une référence après sauvegarde.

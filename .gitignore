@@ -13,5 +13,6 @@ data/*.db-shm
 captures/
 .sabotage.json
 qa/rapport/
+qa/*.png
 qa/verdict.json
 .DS_Store

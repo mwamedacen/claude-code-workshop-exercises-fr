@@ -38,14 +38,14 @@ export const POINTS = [
   { name: 'w3-fonction', description: 'W3 · la fonction « Salle libre maintenant »' },
   { name: 'w4-depart', description: 'W4 · départ : le nouveau look et la skill charte' },
   { name: 'w4-analyses', description: 'W4 · le subagent, la skill de données, le notebook, le piège corrigé' },
-  { name: 'w5-depart', description: "W5 · départ : les cartes A, B, C, l'interface découpée, worktree.baseRef" },
-  { name: 'w5-fusion', description: 'W5 · les trois cartes prêtes à fusionner (branches carte-a, carte-b, carte-c)' },
-  { name: 'w6-depart', description: 'W6 · départ : les trois fonctions fusionnées' },
-  { name: 'w6-commande', description: "W6 · l'agent qa-visiteur, le verdict de claude -p et son schéma" },
-  { name: 'w7-depart', description: 'W7 · départ : le programme de recette et sa page de rapport' },
-  { name: 'w7-mur', description: 'W7 · le hook PreToolUse' },
-  { name: 'w8-depart', description: 'W8 · départ : les deux hooks commités' },
-  { name: 'final', description: "Fin · l'export vers l'agenda (carte D)" },
+  { name: 'w5-depart', description: "W5 · départ : le kit du jour 2 (cartes A à D et leurs tests en attente, l'agent de recette à brancher, worktree.baseRef)" },
+  { name: 'w5-fusion', description: 'W5 · trois briefs et trois branches de cartes prêtes à fusionner' },
+  { name: 'w6-depart', description: 'W6 · départ : cartes A, B, C fusionnées, test A×B actif' },
+  { name: 'w6-commande', description: "W6 · trois parcours et l'agent qa-visiteur" },
+  { name: 'w7-depart', description: 'W7 · départ : le programme Agent SDK et sa page de rapport' },
+  { name: 'w7-mur', description: 'W7 · le hook PreToolUse qui protège le plan' },
+  { name: 'w8-depart', description: 'W8 · départ : le verrou Stop, les deux hooks commités' },
+  { name: 'final', description: "Fin · la carte D, l'export vers l'agenda" },
 ];
 
 // W5: the three card branches, created next to travail-w5-fusion from their tags.

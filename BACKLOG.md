@@ -8,21 +8,25 @@ Ces quatre cartes proviennent du notebook `analytics/septembre.ipynb`. Les nombr
 - **Pourquoi :** 231 réunions sur 717 n'ont pas de check-in (32,2 %).
 - **Quoi :** si personne ne confirme son arrivée dix minutes après le début, la salle redevient disponible ; la personne qui a réservé est avertie.
 - **Vérification :** avec l'horloge simulée, une réunion sans check-in est libérée à +10 min ; une réunion confirmée reste réservée.
+- **Contrôle :** `node --test test/acceptation/carte-a.test.js`, après avoir retiré le `todo` de chaque test. Sans arrivée signalée 10 minutes après le début, la réunion est marquée `liberee: true` dans `GET /api/reservations` et `GET /api/mes-reservations`, et la salle redevient disponible.
 
 ### B · Proposer la bonne taille
 - **Pourquoi :** 92 réservations sur 231 dans les salles de huit places ou plus étaient pour une ou deux personnes.
 - **Quoi :** suggérer une salle plus petite qui est libre sur le même créneau, sans interdire la salle choisie.
 - **Vérification :** pour deux personnes, la suggestion affiche la plus petite salle libre ; si aucune ne convient, la réservation initiale reste possible.
+- **Contrôle :** `node --test test/acceptation/carte-b.test.js`, après avoir retiré le `todo` de chaque test. `GET /api/bonne-taille?salle=&jour=&debut=&fin=&personnes=` renvoie `tropGrande` (capacité supérieure au double du nombre de personnes) et `suggestion` (la plus petite salle libre qui suffit, ou `null`). Avec la carte A : `test/acceptation/fusion-a-b.test.js` (une salle libérée peut être suggérée).
 
 ### C · S'asseoir avec son équipe
 - **Pourquoi :** les postes sont occupés à 92,4 % le mardi, mais seulement 27,0 % le vendredi ; en Marketing, 43,0 % des réservations sont dans la zone de l'équipe.
 - **Quoi :** indiquer les jours de présence de l'équipe et les postes libres près de ses collègues.
-- **Vérification :** le panneau montre le nombre de collègues présents dans chaque zone pour le jour choisi, et propose un poste libre à proximité sans masquer les autres.
+- **Vérification :** pour le jour choisi, le panneau montre les collègues de mon équipe présents et propose un poste libre près d'eux.
+- **Contrôle :** `node --test test/acceptation/carte-c.test.js`, après avoir retiré le `todo` de chaque test. `GET /api/equipe?employe=&jour=` renvoie `equipe`, `presents` (les postes de mes collègues d'équipe ce jour-là) et `conseil` (un poste libre, dans la zone de l'équipe quand il en reste un).
 
 ### D · Ajouter à mon agenda
 - **Pourquoi :** 1 131 clics sur le lien désactivé, venant de 76 des 108 personnes qui ont réservé.
 - **Quoi :** télécharger un événement de calendrier pour sa propre réservation.
 - **Vérification :** l'événement contient la bonne date, le bon créneau et le nom de la salle ou du poste ; aucune donnée d'un collègue n'y apparaît.
+- **Contrôle :** `node --test test/acceptation/carte-d.test.js`, après avoir retiré le `todo` de chaque test. `GET /api/reservations/:id/agenda.ics?employe=` renvoie un fichier `text/calendar` à la personne qui a réservé et 403 à toute autre personne.
 
 ---
 

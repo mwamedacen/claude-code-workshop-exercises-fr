@@ -24,7 +24,8 @@ async function avecServeur(maintenant, f) {
 test('« Salle libre maintenant » : assez de places, libre pendant une heure, la plus petite d’abord', async () => {
   await avecServeur(`${AUJOURDHUI}T09:05`, async (get) => {
     const plan = await get('/api/plan');
-    const reunions = (await get(`/api/reservations?jour=${AUJOURDHUI}`)).filter((r) => r.type === 'salle');
+    // Les réunions libérées faute d'arrivée (carte A) ne bloquent plus la salle.
+    const reunions = (await get(`/api/reservations?jour=${AUJOURDHUI}`)).filter((r) => r.type === 'salle' && !r.liberee);
     const debut = 9 * 60 + 5;
     const fin = debut + 60;
     const occupee = (salle) =>

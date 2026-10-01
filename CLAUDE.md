@@ -23,3 +23,4 @@ Réservation de postes et de salles de réunion pour un étage en flex office. D
 - Toute correction commence par un test qui échoue, puis qui passe.
 - Aucune donnée personnelle (nom, e-mail) dans un export ou un journal : on utilise l'identifiant de la personne.
 - `data/floor-plan.json` appartient aux Services généraux : on ne le modifie jamais, on corrige le code.
+- Les tests de `test/acceptation/` fixent le contrat d'une carte : on retire le `todo`, on ne change pas l'assertion.
