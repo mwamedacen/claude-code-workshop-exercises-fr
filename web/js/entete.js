@@ -17,7 +17,6 @@ export function afficherEntete(app) {
   $('btn-mes-reservations').addEventListener('click', () => app.afficherMesReservations());
   $('btn-salle-libre').addEventListener('click', () => app.demanderSalleLibre());
   $('btn-equipe').addEventListener('click', () => app.afficherEquipe());
-  $('agenda').addEventListener('click', (e) => e.preventDefault()); // pas encore disponible
 }
 
 export function afficherQui(app) {

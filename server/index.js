@@ -76,6 +76,43 @@ function estLiberee(r, ici) {
   return minutes >= enMinutes(r.debut) + CONFIG.liberationMinutes && minutes < enMinutes(r.fin);
 }
 
+// Carte D : un fichier iCalendar (RFC 5545) pour une réservation. Une réunion a ses heures
+// en UTC (le serveur calcule à l'heure de Paris, voir tz.js) ; un poste occupe toute la journée.
+// Aucune donnée personnelle : ni nom ni e-mail, même ceux de la personne qui a réservé.
+function texteIcs(t) {
+  return String(t).replace(/[\\;,]/g, (c) => `\\${c}`);
+}
+
+function enUtc(d) {
+  return d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+}
+
+function agendaIcs(r, nom, etage, ici) {
+  const [a, m, j] = r.jour.split('-').map(Number);
+  const quand =
+    r.type === 'poste'
+      ? [`DTSTART;VALUE=DATE:${r.jour.replace(/-/g, '')}`, `DTEND;VALUE=DATE:${cleDuJour(ajouterJours(new Date(a, m - 1, j), 1)).replace(/-/g, '')}`]
+      : [r.debut, r.fin].map((h, i) => {
+          const minutes = enMinutes(h);
+          return `${i ? 'DTEND' : 'DTSTART'}:${enUtc(new Date(a, m - 1, j, Math.floor(minutes / 60), minutes % 60))}`;
+        });
+  return [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Ma Place//Agenda//FR',
+    'CALSCALE:GREGORIAN',
+    'BEGIN:VEVENT',
+    `UID:reservation-${r.id}@ma-place.example`,
+    `DTSTAMP:${enUtc(ici)}`,
+    ...quand,
+    `SUMMARY:${texteIcs(nom)}`,
+    `LOCATION:${texteIcs(`Ma Place, ${etage}`)}`,
+    'END:VEVENT',
+    'END:VCALENDAR',
+    '',
+  ].join('\r\n');
+}
+
 function json(res, statut, donnees) {
   res.writeHead(statut, { 'Content-Type': 'application/json; charset=utf-8' });
   res.end(JSON.stringify(donnees));
@@ -362,6 +399,27 @@ export async function demarrer(options = {}) {
         }
         db.prepare('UPDATE reservations SET arrivee_le = ? WHERE id = ?').run(maintenant().toISOString(), r.id);
         return json(res, 200, { ok: true });
+      }
+
+      const agenda = /^\/api\/reservations\/(\d+)\/agenda\.ics$/.exec(p);
+      if (req.method === 'GET' && agenda) {
+        // Carte D : « Ajouter à mon agenda », seulement pour sa propre réservation.
+        const r = db
+          .prepare('SELECT id, employe_id, type, ressource, jour, debut, fin FROM reservations WHERE id = ?')
+          .get(Number(agenda[1]));
+        if (!r) return json(res, 404, { erreur: 'Réservation introuvable.' });
+        if (url.searchParams.get('employe') !== r.employe_id) {
+          return json(res, 403, { erreur: "Ce n'est pas votre réservation." });
+        }
+        const nom =
+          r.type === 'poste'
+            ? `Poste ${r.ressource}`
+            : `Salle ${(plan.salles.find((x) => x.id === r.ressource) || { name: r.ressource }).name}`;
+        res.writeHead(200, {
+          'Content-Type': 'text/calendar; charset=utf-8',
+          'Content-Disposition': `attachment; filename="ma-place-${r.id}.ics"`,
+        });
+        return res.end(agendaIcs(r, nom, plan.etage, maintenant()));
       }
 
       if (req.method === 'GET' && p === '/api/export.csv') {

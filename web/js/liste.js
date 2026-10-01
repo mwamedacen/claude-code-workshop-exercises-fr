@@ -1,4 +1,4 @@
-// « Mes réservations » : la liste, avec « Annuler » et « Je suis arrivé·e ».
+// « Mes réservations » : la liste, avec « Ajouter à mon agenda », « Annuler » et « Je suis arrivé·e ».
 import { etat, trouverSalle } from './etat.js';
 import { dateCourte } from './dates.js';
 import { api } from './api.js';
@@ -14,7 +14,10 @@ export async function afficherMesReservations(app, erreur) {
       : `<button class="bouton petit secondaire" data-arrivee="${r.id}">Je suis arrivé·e</button>`;
     // Carte A : la personne qui a réservé voit que sa réunion a été libérée.
     const liberee = r.liberee ? '<span class="badge">libérée</span>' : '';
-    return `<li><span class="quand">${h(dateCourte(r.jour))}</span><span class="quoi">${quoi}</span><span class="actions">${liberee}${arrivee}<button class="bouton petit danger" data-annuler="${i}">Annuler</button></span></li>`;
+    // Carte D : le fichier de calendrier de cette réservation, pour la personne choisie en haut.
+    const ics = `/api/reservations/${r.id}/agenda.ics?employe=${encodeURIComponent(etat.moi)}`;
+    const agenda = `<a class="bouton petit secondaire" href="${h(ics)}" download>Ajouter à mon agenda</a>`;
+    return `<li><span class="quand">${h(dateCourte(r.jour))}</span><span class="quoi">${quoi}</span><span class="actions">${liberee}${agenda}${arrivee}<button class="bouton petit danger" data-annuler="${i}">Annuler</button></span></li>`;
   });
   div.innerHTML = `
     <h2>Mes réservations</h2>

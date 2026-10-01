@@ -81,7 +81,7 @@ function sansCollegue(texte, moi) {
   }
 }
 
-test("ma réunion : l'événement a la bonne date, le bon créneau et le nom de la salle", { todo: 'Carte D : retirez ce todo quand la carte est réalisée' }, async () => {
+test("ma réunion : l'événement a la bonne date, le bon créneau et le nom de la salle", async () => {
   await avecServeur(async (get) => {
     const { salle } = await reservationsDeCamille(get);
     const fichier = await telecharger(get, salle.id, 'e001');
@@ -94,7 +94,7 @@ test("ma réunion : l'événement a la bonne date, le bon créneau et le nom de 
   });
 });
 
-test("mon poste : l'événement occupe toute la journée et porte le nom du poste", { todo: 'Carte D : retirez ce todo quand la carte est réalisée' }, async () => {
+test("mon poste : l'événement occupe toute la journée et porte le nom du poste", async () => {
   await avecServeur(async (get) => {
     const { poste } = await reservationsDeCamille(get);
     const fichier = await telecharger(get, poste.id, 'e001');
@@ -106,7 +106,7 @@ test("mon poste : l'événement occupe toute la journée et porte le nom du post
   });
 });
 
-test("la réservation d'une autre personne est refusée", { todo: 'Carte D : retirez ce todo quand la carte est réalisée' }, async () => {
+test("la réservation d'une autre personne est refusée", async () => {
   await avecServeur(async (get) => {
     const { poste, salle } = await reservationsDeCamille(get);
     // Léa (e003) a aussi une réunion dans la salle Loire le 15 octobre.
@@ -116,7 +116,7 @@ test("la réservation d'une autre personne est refusée", { todo: 'Carte D : ret
   });
 });
 
-test('une réservation inconnue donne 404', { todo: 'Carte D : retirez ce todo quand la carte est réalisée' }, async () => {
+test('une réservation inconnue donne 404', async () => {
   await avecServeur(async (get) => {
     const { salle } = await reservationsDeCamille(get);
     assert.equal((await get(`/api/reservations/${salle.id}/agenda.ics?employe=e001`)).status, 200);

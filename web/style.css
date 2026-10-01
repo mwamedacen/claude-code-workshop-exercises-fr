@@ -121,6 +121,7 @@ input[type="number"] { width: 70px; }
 .bouton:hover { filter: brightness(1.08); }
 .bouton.secondaire { background: transparent; color: var(--marque); }
 .bouton.petit { padding: 4px 10px; font-size: 13px; }
+a.bouton { display: inline-block; text-decoration: none; }
 .bouton.danger { background: transparent; color: var(--alerte); border-color: var(--alerte); }
 .bouton:focus-visible, a:focus-visible, [role="button"]:focus-visible { outline: 3px solid var(--marque); outline-offset: 2px; }
 
@@ -132,7 +133,6 @@ input[type="number"] { width: 70px; }
 }
 .pastille.alerte { color: var(--alerte); border-color: var(--alerte); }
 .pastille.discrete { font-family: var(--mono); }
-.lien-inactif { color: var(--texte-doux); opacity: 0.7; text-decoration: none; cursor: not-allowed; }
 
 /* Jours */
 .jours { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px 24px 0; }
