@@ -43,7 +43,7 @@ async function sallesLibres(appel, debut, fin) {
   return plan.salles.filter((salle) => !occupee(salle));
 }
 
-test('une salle est trop grande au-delà du double des places nécessaires ; la suggestion est la plus petite salle libre qui suffit', { todo: 'Carte B : retirez ce todo quand la carte est réalisée' }, async () => {
+test('une salle est trop grande au-delà du double des places nécessaires ; la suggestion est la plus petite salle libre qui suffit', async () => {
   await avecServeur(async (appel) => {
     const plan = (await appel('GET', '/api/plan')).donnees;
     for (const [debut, fin] of [['15h00', '16h00'], ['10h00', '11h00']]) {
@@ -72,7 +72,7 @@ test('une salle est trop grande au-delà du double des places nécessaires ; la 
   });
 });
 
-test("pas de suggestion quand aucune salle plus petite n'est libre", { todo: 'Carte B : retirez ce todo quand la carte est réalisée' }, async () => {
+test("pas de suggestion quand aucune salle plus petite n'est libre", async () => {
   await avecServeur(async (appel) => {
     // On occupe de 15h00 à 16h00 toutes les salles de moins de 8 places encore libres.
     const plan = (await appel('GET', '/api/plan')).donnees;
@@ -88,7 +88,7 @@ test("pas de suggestion quand aucune salle plus petite n'est libre", { todo: 'Ca
   });
 });
 
-test('la salle choisie reste réservable', { todo: 'Carte B : retirez ce todo quand la carte est réalisée' }, async () => {
+test('la salle choisie reste réservable', async () => {
   await avecServeur(async (appel) => {
     const r = await conseil(appel, 'garonne', 2, '15h00', '16h00');
     assert.equal(r.statut, 200);
@@ -98,7 +98,7 @@ test('la salle choisie reste réservable', { todo: 'Carte B : retirez ce todo qu
   });
 });
 
-test('une salle inconnue donne 404, un créneau invalide 400', { todo: 'Carte B : retirez ce todo quand la carte est réalisée' }, async () => {
+test('une salle inconnue donne 404, un créneau invalide 400', async () => {
   await avecServeur(async (appel) => {
     assert.equal((await conseil(appel, 'garonne', 2, '15h00', '16h00')).statut, 200);
     assert.equal((await conseil(appel, 'inconnue', 2, '15h00', '16h00')).statut, 404, 'salle inconnue');

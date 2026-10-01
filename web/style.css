@@ -189,6 +189,8 @@ input[type="number"] { width: 70px; }
 .bandeau { border-radius: var(--rayon-petit); padding: 8px 12px; margin: 0 0 12px; font-size: 14px; }
 .bandeau.info { background: var(--libre); color: var(--texte); }
 .formulaire { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 8px 0 12px; }
+.bandeau.conseil { background: var(--marque-doux); color: var(--texte); border-radius: var(--rayon-petit); padding: 8px 12px; margin: 0 0 12px; font-size: 14px; }
+.bandeau.conseil a { color: var(--marque); font-weight: 600; }
 .formulaire label { display: flex; align-items: center; gap: 6px; color: var(--texte-doux); font-size: 13px; }
 .message.ok { color: var(--succes); font-weight: 600; }
 .message.erreur { color: var(--alerte); font-weight: 600; }

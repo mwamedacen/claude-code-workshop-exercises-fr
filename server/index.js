@@ -255,6 +255,29 @@ export async function demarrer(options = {}) {
         return json(res, 200, { salles, debut: enTexte(debut), fin: enTexte(fin) });
       }
 
+      if (req.method === 'GET' && p === '/api/bonne-taille') {
+        // Carte B : une salle est « trop grande » quand elle a plus du double des places nécessaires.
+        // On propose alors la plus petite salle qui suffit, libre sur le même créneau.
+        const salle = plan.salles.find((x) => x.id === url.searchParams.get('salle'));
+        if (!salle) return json(res, 404, { erreur: 'Salle inconnue.' });
+        const personnes = Math.max(1, Number(url.searchParams.get('personnes')) || 1);
+        const jour = jourDepuis(url.searchParams.get('jour')) || cleDuJour(maintenant());
+        const debut = enMinutes(normaliserHeure(url.searchParams.get('debut')));
+        const fin = enMinutes(normaliserHeure(url.searchParams.get('fin')));
+        if (Number.isNaN(debut) || Number.isNaN(fin) || debut >= fin) return json(res, 400, { erreur: 'Créneau invalide.' });
+        const tropGrande = salle.capacite > 2 * personnes;
+        if (!tropGrande) return json(res, 200, { tropGrande, suggestion: null });
+        const reunions = db
+          .prepare("SELECT ressource, debut, fin FROM reservations WHERE type = 'salle' AND jour = ?")
+          .all(jour);
+        const libre = (s) => !reunions.some((r) => r.ressource === s.id && enMinutes(r.debut) < fin && debut < enMinutes(r.fin));
+        const candidate = plan.salles
+          .filter((s) => s.id !== salle.id && s.capacite >= personnes && s.capacite < salle.capacite && libre(s))
+          .sort((a, b) => a.capacite - b.capacite || a.name.localeCompare(b.name, 'fr'))[0];
+        const suggestion = candidate ? { id: candidate.id, name: candidate.name, capacite: candidate.capacite } : null;
+        return json(res, 200, { tropGrande, suggestion });
+      }
+
       if (req.method === 'GET' && p === '/api/mes-reservations') {
         const employe = url.searchParams.get('employe') || '';
         const lignes = db
