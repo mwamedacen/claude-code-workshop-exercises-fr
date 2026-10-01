@@ -29,6 +29,7 @@ svg text { font-family: Arial, Helvetica, sans-serif; font-size: 11px; fill: #33
 .salle rect { fill: #e8eefc; stroke: #333333; cursor: pointer; }
 .salle.pleine rect { fill: #f9d6a5; }
 .selection { stroke: #ff6600 !important; stroke-width: 3 !important; }
+.salle.suggestion rect { stroke: #2e7d32; stroke-width: 5; }
 .legende-case { display: inline-block; width: 12px; height: 12px; border: 1px solid #333; margin: 0 4px 0 12px; vertical-align: middle; }
 .erreur { color: #cc0000; font-weight: bold; }
 .ok { color: #008800; font-weight: bold; }

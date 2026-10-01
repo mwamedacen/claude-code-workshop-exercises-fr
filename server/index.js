@@ -8,7 +8,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { ouvrirBase, jourDeReference } from './db.js';
 import { CONFIG } from './config.js';
-import { cleDuJour, ajouterJours, enMinutes } from './dates.js';
+import { cleDuJour, ajouterJours, enMinutes, enTexte } from './dates.js';
 
 const ICI = path.dirname(fileURLToPath(import.meta.url));
 const RACINE = path.join(ICI, '..');
@@ -218,6 +218,31 @@ export async function demarrer(options = {}) {
           )
           .run('salle', ressource, employe, jour, debut, fin, nb, maintenant().toISOString());
         return json(res, 201, { id: Number(r.lastInsertRowid) });
+      }
+
+      if (req.method === 'GET' && p === '/api/salles-libres') {
+        // « Salle libre maintenant » : les salles libres pendant l'heure qui vient, assez grandes,
+        // la plus petite d'abord (pour ne pas bloquer une grande salle pour deux personnes).
+        const personnes = Math.max(1, Number(url.searchParams.get('personnes')) || 1);
+        const equipement = url.searchParams.get('equipement');
+        const ici = maintenant();
+        const debut = ici.getHours() * 60 + ici.getMinutes();
+        const fin = Math.min(debut + 60, CONFIG.fermeture * 60);
+        if (debut < CONFIG.ouverture * 60 || debut >= CONFIG.fermeture * 60) {
+          return json(res, 200, { salles: [], message: `L'étage est fermé : il ouvre de ${CONFIG.ouverture}h à ${CONFIG.fermeture}h.` });
+        }
+        const reunions = db
+          .prepare("SELECT ressource, debut, fin FROM reservations WHERE type = 'salle' AND jour = ?")
+          .all(cleDuJour(ici));
+        const libre = (salle) =>
+          !reunions.some((r) => r.ressource === salle.id && enMinutes(r.debut) < fin && debut < enMinutes(r.fin));
+        const salles = plan.salles
+          .filter((salle) => salle.capacite >= personnes)
+          .filter((salle) => !equipement || salle.equipements.includes(equipement))
+          .filter(libre)
+          .sort((a, b) => a.capacite - b.capacite || a.name.localeCompare(b.name, 'fr'))
+          .map(({ id, name, capacite, equipements }) => ({ id, name, capacite, equipements }));
+        return json(res, 200, { salles, debut: enTexte(debut), fin: enTexte(fin) });
       }
 
       if (req.method === 'GET' && p === '/api/mes-reservations') {

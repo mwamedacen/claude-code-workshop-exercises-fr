@@ -28,3 +28,8 @@ export function enMinutes(h) {
   if (!m) return NaN;
   return Number(m[1]) * 60 + Number(m[2]);
 }
+
+// 570 minutes -> « 9h30 »
+export function enTexte(minutes) {
+  return `${Math.floor(minutes / 60)}h${String(minutes % 60).padStart(2, '0')}`;
+}

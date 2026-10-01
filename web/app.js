@@ -7,6 +7,7 @@ var personas = [];
 var reservationsDuJour = [];
 var jourChoisi = null; // "AAAA-MM-JJ"
 var selectedItem = null; // { type: 'poste' | 'salle', id }
+var suggestions = []; // salles proposées par « Salle libre maintenant »
 var moi = localStorage.getItem('maplace.qui') || 'e001';
 var DEBUG = false;
 
@@ -97,6 +98,7 @@ function afficherEntete() {
   if (info.branche) document.getElementById('branche').textContent = '[branche : ' + info.branche + ']';
   document.getElementById('etage').textContent = plan.etage;
   document.getElementById('btn-mes-reservations').addEventListener('click', afficherMesReservations);
+  document.getElementById('btn-salle-libre').addEventListener('click', demanderSalleLibre);
   document.getElementById('agenda').addEventListener('click', function (e) {
     e.preventDefault(); // pas encore disponible
   });
@@ -196,7 +198,7 @@ function dessinerPlan() {
   for (var s = 0; s < plan.salles.length; s++) {
     var salle = plan.salles[s];
     var nb = reservationsSalle(salle.id).length;
-    var classe = 'salle' + (nb >= 3 ? ' pleine' : '');
+    var classe = 'salle' + (nb >= 3 ? ' pleine' : '') + (suggestions.indexOf(salle.id) >= 0 ? ' suggestion' : '');
     var label = 'Salle ' + salle.name + ', ' + salle.capacite + ' places, ' + (nb == 0 ? 'aucune réunion' : nb + ' réunion' + (nb > 1 ? 's' : '')) + ' ce jour';
     svg += '<g class="' + classe + '" data-type="salle" data-id="' + salle.id + '" role="button" tabindex="0" aria-label="' + label + '">';
     svg += '<rect x="' + salle.x + '" y="' + salle.y + '" width="' + salle.w + '" height="' + salle.h + '"' + (selectedItem && selectedItem.id == salle.id ? ' class="selection"' : '') + '></rect>';
@@ -234,6 +236,7 @@ function dessinerPlan() {
 
 function selectionner(e) {
   selectedItem = { type: this.getAttribute('data-type'), id: this.getAttribute('data-id') };
+  suggestions = [];
   dessinerPlan();
   afficherPanneau();
 }
@@ -389,6 +392,56 @@ function arrivee(id) {
     .catch(function (e) {
       erreurListe(e.message);
     });
+}
+
+// ---------------------------------------------------------------------------
+// « Salle libre maintenant »
+// ---------------------------------------------------------------------------
+
+function demanderSalleLibre() {
+  selectedItem = null;
+  var div = document.getElementById('panneau');
+  div.innerHTML =
+    '<h3>Salle libre maintenant</h3>' +
+    '<p>Combien êtes-vous ? <input id="combien" type="number" min="1" value="2" style="width:50px"> ' +
+    '<button id="btn-chercher">Chercher</button></p><div id="resultats"></div>';
+  document.getElementById('btn-chercher').addEventListener('click', chercherSalleLibre);
+}
+
+function chercherSalleLibre() {
+  var personnes = Number(document.getElementById('combien').value) || 1;
+  return api('GET', '/api/salles-libres?personnes=' + personnes).then(function (r) {
+    if (jourChoisi != info.aujourdhui) {
+      jourChoisi = info.aujourdhui; // « maintenant », c'est aujourd'hui
+      afficherJours();
+    }
+    suggestions = r.salles.map(function (s) {
+      return s.id;
+    });
+    var html = '';
+    if (r.message) html = '<p class="erreur">' + r.message + '</p>';
+    else if (r.salles.length == 0) html = '<p><i>Aucune salle libre de ' + r.debut + ' à ' + r.fin + ' pour ' + personnes + ' personne(s).</i></p>';
+    else {
+      html = '<p>Libres de ' + r.debut + ' à ' + r.fin + ', la plus petite d’abord :</p><table>';
+      for (var i = 0; i < r.salles.length; i++) {
+        var s = r.salles[i];
+        html += '<tr><td><a href="#" data-salle="' + s.id + '">' + s.name + '</a></td><td>' + s.capacite + ' places</td><td>' + (s.equipements.join(', ') || '-') + '</td></tr>';
+      }
+      html += '</table>';
+    }
+    document.getElementById('resultats').innerHTML = html;
+    var liens = document.querySelectorAll('#resultats a[data-salle]');
+    for (var k = 0; k < liens.length; k++) {
+      liens[k].addEventListener('click', function (e) {
+        e.preventDefault();
+        selectedItem = { type: 'salle', id: this.getAttribute('data-salle') };
+        suggestions = [];
+        dessinerPlan();
+        afficherPanneau();
+      });
+    }
+    return chargerJour();
+  });
 }
 
 // ---------------------------------------------------------------------------
