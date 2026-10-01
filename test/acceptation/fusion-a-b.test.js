@@ -12,7 +12,7 @@ function minutes(heure) {
   return m ? Number(m[1]) * 60 + Number(m[2]) : NaN;
 }
 
-test('« La bonne taille » propose une salle libérée par la carte A', { todo: 'Cartes A et B : retirez ce todo quand les deux cartes sont fusionnées' }, async () => {
+test('« La bonne taille » propose une salle libérée par la carte A', async () => {
   const s = await demarrer({ port: 0, db: ':memory:', maintenant: `${JOUR}T14:15` });
   const appel = async (methode, chemin, corps) => {
     const r = await fetch(s.url + chemin, {

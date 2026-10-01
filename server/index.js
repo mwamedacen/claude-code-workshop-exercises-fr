@@ -296,8 +296,9 @@ export async function demarrer(options = {}) {
         const tropGrande = salle.capacite > 2 * personnes;
         if (!tropGrande) return json(res, 200, { tropGrande, suggestion: null });
         const reunions = db
-          .prepare("SELECT ressource, debut, fin FROM reservations WHERE type = 'salle' AND jour = ?")
-          .all(jour);
+          .prepare("SELECT type, jour, ressource, debut, fin, arrivee_le FROM reservations WHERE type = 'salle' AND jour = ?")
+          .all(jour)
+          .filter((r) => !estLiberee(r, maintenant()));
         const libre = (s) => !reunions.some((r) => r.ressource === s.id && enMinutes(r.debut) < fin && debut < enMinutes(r.fin));
         const candidate = plan.salles
           .filter((s) => s.id !== salle.id && s.capacite >= personnes && s.capacite < salle.capacite && libre(s))
