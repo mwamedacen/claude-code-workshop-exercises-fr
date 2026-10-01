@@ -1,5 +1,31 @@
 # Backlog de Ma Place
 
+## Cartes issues des données de septembre
+
+Ces quatre cartes proviennent du notebook `analytics/septembre.ipynb`. Les nombres portent sur les réservations distinctes hors comptes de service ; ils justifient une hypothèse de travail, pas une décision automatique.
+
+### A · Libérer une salle restée vide
+- **Pourquoi :** 231 réunions sur 717 n'ont pas de check-in (32,2 %).
+- **Quoi :** si personne ne confirme son arrivée dix minutes après le début, la salle redevient disponible ; la personne qui a réservé est avertie.
+- **Vérification :** avec l'horloge simulée, une réunion sans check-in est libérée à +10 min ; une réunion confirmée reste réservée.
+
+### B · Proposer la bonne taille
+- **Pourquoi :** 92 réservations sur 231 dans les salles de huit places ou plus étaient pour une ou deux personnes.
+- **Quoi :** suggérer une salle plus petite qui est libre sur le même créneau, sans interdire la salle choisie.
+- **Vérification :** pour deux personnes, la suggestion affiche la plus petite salle libre ; si aucune ne convient, la réservation initiale reste possible.
+
+### C · S'asseoir avec son équipe
+- **Pourquoi :** les postes sont occupés à 92,4 % le mardi, mais seulement 27,0 % le vendredi ; en Marketing, 43,0 % des réservations sont dans la zone de l'équipe.
+- **Quoi :** indiquer les jours de présence de l'équipe et les postes libres près de ses collègues.
+- **Vérification :** le panneau montre le nombre de collègues présents dans chaque zone pour le jour choisi, et propose un poste libre à proximité sans masquer les autres.
+
+### D · Ajouter à mon agenda
+- **Pourquoi :** 1 131 clics sur le lien désactivé, venant de 76 des 108 personnes qui ont réservé.
+- **Quoi :** télécharger un événement de calendrier pour sa propre réservation.
+- **Vérification :** l'événement contient la bonne date, le bon créneau et le nom de la salle ou du poste ; aucune donnée d'un collègue n'y apparaît.
+
+---
+
 Les demandes de l'équipe, de la plus petite à la plus grande. Chaque carte dit **pourquoi** et **comment vérifier** que c'est fait : on ne la ferme que quand la vérification passe.
 
 Dans chaque atelier, quand vous avez fini : prenez une carte et appliquez-lui ce que vous venez d'apprendre.
