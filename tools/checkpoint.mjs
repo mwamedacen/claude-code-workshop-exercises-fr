@@ -18,7 +18,7 @@ import { fileURLToPath } from 'node:url';
 
 // The course repository: where the tags come from when this repository lacks them.
 // MA_PLACE_COURSE_REPO replaces it (the trainer-side tests point it at a local repository).
-export const COURSE_REPO = process.env.MA_PLACE_COURSE_REPO || 'https://github.com/mwamedacen/ma-place.git';
+export const COURSE_REPO = process.env.MA_PLACE_COURSE_REPO || 'https://github.com/mwamedacen/claude-code-training-fr.git';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
