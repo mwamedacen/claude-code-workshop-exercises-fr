@@ -68,6 +68,14 @@ function chevauche(a, b) {
   return enMinutes(a.debut) < enMinutes(b.fin) && enMinutes(b.debut) < enMinutes(a.fin);
 }
 
+// Carte A : une réunion du jour sans arrivée signalée, commencée depuis au moins
+// CONFIG.liberationMinutes et pas encore finie, est libérée : la salle redevient disponible.
+function estLiberee(r, ici) {
+  if (r.type !== 'salle' || r.arrivee_le || r.jour !== cleDuJour(ici)) return false;
+  const minutes = ici.getHours() * 60 + ici.getMinutes();
+  return minutes >= enMinutes(r.debut) + CONFIG.liberationMinutes && minutes < enMinutes(r.fin);
+}
+
 function json(res, statut, donnees) {
   res.writeHead(statut, { 'Content-Type': 'application/json; charset=utf-8' });
   res.end(JSON.stringify(donnees));
@@ -157,7 +165,7 @@ export async function demarrer(options = {}) {
         return json(
           res,
           200,
-          lignes.map((r) => ({ ...r, qui: `${r.first_name} ${r.last_name[0]}.` })),
+          lignes.map((r) => ({ ...r, qui: `${r.first_name} ${r.last_name[0]}.`, liberee: estLiberee(r, maintenant()) })),
         );
       }
 
@@ -206,8 +214,9 @@ export async function demarrer(options = {}) {
         const nb = Number(corps.nb || 1);
         if (nb > salle.capacite) return json(res, 409, { erreur: `Trop de monde pour la salle ${salle.name} (${salle.capacite} places).` });
         const existantes = db
-          .prepare("SELECT debut, fin FROM reservations WHERE type = 'salle' AND ressource = ? AND jour = ?")
-          .all(ressource, jour);
+          .prepare("SELECT type, jour, debut, fin, arrivee_le FROM reservations WHERE type = 'salle' AND ressource = ? AND jour = ?")
+          .all(ressource, jour)
+          .filter((e) => !estLiberee(e, maintenant()));
         if (existantes.some((e) => chevauche({ debut, fin }, e))) {
           return json(res, 409, { erreur: 'La salle est déjà prise sur ce créneau.' });
         }
@@ -232,8 +241,9 @@ export async function demarrer(options = {}) {
           return json(res, 200, { salles: [], message: `L'étage est fermé : il ouvre de ${CONFIG.ouverture}h à ${CONFIG.fermeture}h.` });
         }
         const reunions = db
-          .prepare("SELECT ressource, debut, fin FROM reservations WHERE type = 'salle' AND jour = ?")
-          .all(cleDuJour(ici));
+          .prepare("SELECT type, ressource, jour, debut, fin, arrivee_le FROM reservations WHERE type = 'salle' AND jour = ?")
+          .all(cleDuJour(ici))
+          .filter((r) => !estLiberee(r, ici));
         const libre = (salle) =>
           !reunions.some((r) => r.ressource === salle.id && enMinutes(r.debut) < fin && debut < enMinutes(r.fin));
         const salles = plan.salles
@@ -253,7 +263,7 @@ export async function demarrer(options = {}) {
              FROM reservations WHERE employe_id = ? AND jour >= ? ORDER BY jour, id`,
           )
           .all(employe, cleDuJour(maintenant()));
-        return json(res, 200, lignes);
+        return json(res, 200, lignes.map((r) => ({ ...r, liberee: estLiberee(r, maintenant()) })));
       }
 
       const annulation = /^\/api\/mes-reservations\/(\d+)$/.exec(p);
@@ -274,7 +284,7 @@ export async function demarrer(options = {}) {
       if (req.method === 'POST' && arrivee) {
         const corps = await lireCorps(req);
         const r = db
-          .prepare('SELECT id, employe_id, type, jour, debut, fin FROM reservations WHERE id = ?')
+          .prepare('SELECT id, employe_id, type, jour, ressource, debut, fin, arrivee_le FROM reservations WHERE id = ?')
           .get(Number(arrivee[1]));
         if (!r) return json(res, 404, { erreur: 'Réservation introuvable.' });
         if (corps.employe && corps.employe !== r.employe_id) {
@@ -288,6 +298,14 @@ export async function demarrer(options = {}) {
           const minutes = ici.getHours() * 60 + ici.getMinutes();
           if (minutes < enMinutes(r.debut) - 15 || minutes >= enMinutes(r.fin)) {
             return json(res, 409, { erreur: 'On signale son arrivée pendant la réunion, au plus tôt 15 minutes avant.' });
+          }
+          if (estLiberee(r, ici)) {
+            const autres = db.prepare(
+              'SELECT type, jour, ressource, debut, fin, arrivee_le FROM reservations WHERE id != ? AND type = ? AND jour = ? AND ressource = ?',
+            ).all(r.id, 'salle', r.jour, r.ressource);
+            if (autres.some((autre) => chevauche(r, autre) && !estLiberee(autre, ici))) {
+              return json(res, 409, { erreur: 'La salle libérée a été réservée par une autre personne.' });
+            }
           }
         }
         db.prepare('UPDATE reservations SET arrivee_le = ? WHERE id = ?').run(maintenant().toISOString(), r.id);

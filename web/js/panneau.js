@@ -13,6 +13,13 @@ function optionsHeures(defaut) {
   return options.join('');
 }
 
+// Carte A : prévenir quand des réunions ont été libérées faute d'arrivée.
+function bandeauLiberation(reunions) {
+  const n = reunions.filter((r) => r.liberee).length;
+  if (!n) return '';
+  return `<p class="bandeau info">${n} réunion${n > 1 ? 's' : ''} libérée${n > 1 ? 's' : ''} : personne n'a signalé son arrivée 10 minutes après le début.</p>`;
+}
+
 export function panneauVide() {
   $('panneau').innerHTML = '<h2>Bienvenue</h2><p class="vide">Choisissez un poste ou une salle sur le plan.</p>';
 }
@@ -44,9 +51,10 @@ export function afficherPanneau(app) {
         <dt>Accessible</dt><dd>${salle.accessible ? 'oui' : 'non'}</dd>
         <dt>Jour</dt><dd>${h(dateLongue(etat.jourChoisi))}</dd>
       </dl>
+      ${bandeauLiberation(reunions)}
       <h3>Réunions ce jour</h3>
       ${reunions.length
-        ? `<ul class="reunions">${reunions.map((r) => `<li><span>${h(r.debut)} – ${h(r.fin)}</span><span>${r.nb_personnes} pers. · ${h(r.qui)}</span></li>`).join('')}</ul>`
+        ? `<ul class="reunions">${reunions.map((r) => `<li${r.liberee ? ' class="liberee"' : ''}><span>${h(r.debut)} – ${h(r.fin)}</span><span>${r.liberee ? '<span class="badge">libérée</span> ' : ''}${r.nb_personnes} pers. · ${h(r.qui)}</span></li>`).join('')}</ul>`
         : '<p class="vide">Aucune.</p>'}
       <h3>Nouvelle réunion</h3>
       <div class="formulaire">

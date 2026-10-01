@@ -39,7 +39,7 @@ const dansLeJour = async (appel, id) =>
 const dansMesReservations = async (appel, employe, id) =>
   (await appel('GET', `/api/mes-reservations?employe=${employe}`)).donnees.find((r) => r.id === id);
 
-test('sans arrivée signalée 10 minutes après le début, la réunion est libérée et la salle se réserve de nouveau', { todo: 'Carte A : retirez ce todo quand la carte est réalisée' }, async () => {
+test('sans arrivée signalée 10 minutes après le début, la réunion est libérée et la salle se réserve de nouveau', async () => {
   await avecServeur(`${JOUR}T14:15`, async (appel) => {
     const id = await reserver(appel, 'e002', '14h00', '15h00');
     assert.equal((await dansLeJour(appel, id))?.liberee, true, 'liberee dans GET /api/reservations');
@@ -47,14 +47,14 @@ test('sans arrivée signalée 10 minutes après le début, la réunion est libé
   });
 });
 
-test('la personne qui a réservé voit sa réunion libérée dans ses réservations', { todo: 'Carte A : retirez ce todo quand la carte est réalisée' }, async () => {
+test('la personne qui a réservé voit sa réunion libérée dans ses réservations', async () => {
   await avecServeur(`${JOUR}T14:15`, async (appel) => {
     const id = await reserver(appel, 'e002', '14h00', '15h00');
     assert.equal((await dansMesReservations(appel, 'e002', id))?.liberee, true, 'liberee dans GET /api/mes-reservations');
   });
 });
 
-test('avant les 10 minutes, la réunion reste réservée', { todo: 'Carte A : retirez ce todo quand la carte est réalisée' }, async () => {
+test('avant les 10 minutes, la réunion reste réservée', async () => {
   await avecServeur(`${JOUR}T14:05`, async (appel) => {
     const id = await reserver(appel, 'e002', '14h00', '15h00');
     assert.equal((await dansLeJour(appel, id))?.liberee, false, 'liberee dans GET /api/reservations');
@@ -63,7 +63,7 @@ test('avant les 10 minutes, la réunion reste réservée', { todo: 'Carte A : re
   });
 });
 
-test("une réunion dont l'arrivée est signalée reste réservée", { todo: 'Carte A : retirez ce todo quand la carte est réalisée' }, async () => {
+test("une réunion dont l'arrivée est signalée reste réservée", async () => {
   await avecServeur(`${JOUR}T14:15`, async (appel) => {
     const id = await reserver(appel, 'e002', '14h00', '15h00');
     assert.equal((await appel('POST', `/api/reservations/${id}/arrivee`, { employe: 'e002' })).statut, 200);
@@ -72,7 +72,7 @@ test("une réunion dont l'arrivée est signalée reste réservée", { todo: 'Car
   });
 });
 
-test('« Salle libre maintenant » propose une salle libérée', { todo: 'Carte A : retirez ce todo quand la carte est réalisée' }, async () => {
+test('« Salle libre maintenant » propose une salle libérée', async () => {
   await avecServeur(`${JOUR}T14:15`, async (appel) => {
     await reserver(appel, 'e002', '14h00', '15h00');
     const { salles } = (await appel('GET', '/api/salles-libres?personnes=4')).donnees;
@@ -80,7 +80,7 @@ test('« Salle libre maintenant » propose une salle libérée', { todo: 'Carte 
   });
 });
 
-test('une arrivée tardive est refusée si la salle libérée a été réservée entre-temps', { todo: 'Carte A : retirez ce todo quand la carte est réalisée' }, async () => {
+test('une arrivée tardive est refusée si la salle libérée a été réservée entre-temps', async () => {
   await avecServeur(`${JOUR}T14:15`, async (appel) => {
     const premiere = await reserver(appel, 'e002', '14h00', '15h00');
     const seconde = await reserver(appel, 'e003', '14h30', '15h00');
