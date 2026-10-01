@@ -12,7 +12,9 @@ export async function afficherMesReservations(app, erreur) {
     const arrivee = r.arrivee_le
       ? '<span class="arrive">arrivé·e</span>'
       : `<button class="bouton petit secondaire" data-arrivee="${r.id}">Je suis arrivé·e</button>`;
-    return `<li><span class="quand">${h(dateCourte(r.jour))}</span><span class="quoi">${quoi}</span><span class="actions">${arrivee}<button class="bouton petit danger" data-annuler="${i}">Annuler</button></span></li>`;
+    // Carte A : la personne qui a réservé voit que sa réunion a été libérée.
+    const liberee = r.liberee ? '<span class="badge">libérée</span>' : '';
+    return `<li><span class="quand">${h(dateCourte(r.jour))}</span><span class="quoi">${quoi}</span><span class="actions">${liberee}${arrivee}<button class="bouton petit danger" data-annuler="${i}">Annuler</button></span></li>`;
   });
   div.innerHTML = `
     <h2>Mes réservations</h2>

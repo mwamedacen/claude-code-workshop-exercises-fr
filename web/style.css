@@ -184,6 +184,10 @@ input[type="number"] { width: 70px; }
 .puce { background: var(--marque-doux); color: var(--texte); border-radius: 999px; padding: 1px 10px; font-size: 12px; font-weight: 600; }
 .reunions { list-style: none; padding: 0; margin: 0 0 12px; display: grid; gap: 6px; }
 .reunions li { display: flex; justify-content: space-between; gap: 8px; padding: 6px 10px; border-radius: var(--rayon-petit); background: var(--fond); font-size: 14px; }
+.reunions li.liberee { opacity: 0.65; text-decoration: line-through; }
+.badge { display: inline-block; text-decoration: none; background: var(--libre); color: var(--texte); border-radius: 999px; padding: 0 8px; font-size: 12px; font-weight: 700; }
+.bandeau { border-radius: var(--rayon-petit); padding: 8px 12px; margin: 0 0 12px; font-size: 14px; }
+.bandeau.info { background: var(--libre); color: var(--texte); }
 .formulaire { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 8px 0 12px; }
 .formulaire label { display: flex; align-items: center; gap: 6px; color: var(--texte-doux); font-size: 13px; }
 .message.ok { color: var(--succes); font-weight: 600; }
