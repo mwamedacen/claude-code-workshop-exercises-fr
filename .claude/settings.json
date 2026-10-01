@@ -1,5 +1,19 @@
 {
   "worktree": {
     "baseRef": "head"
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/diagnostic.mjs"],
+            "timeout": 10
+          }
+        ]
+      }
+    ]
   }
 }
