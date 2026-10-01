@@ -166,6 +166,8 @@ input[type="number"] { width: 70px; }
 .poste.libre { fill: var(--libre); stroke: var(--libre-bord); }
 .poste.occupe { fill: var(--pris); stroke: var(--pris-bord); }
 .poste.moi { fill: var(--moi); stroke: var(--moi-bord); stroke-width: 2.5; }
+.poste.equipe { stroke: var(--marque); stroke-width: 3; stroke-dasharray: 5 3; }
+.poste.conseil { stroke: var(--suggestion); stroke-width: 4; }
 .salle rect { fill: var(--salle); stroke: var(--salle-bord); stroke-width: 1.5; cursor: pointer; rx: 10; }
 .salle.pleine rect { fill: var(--salle-demandee); }
 .salle.suggestion rect { stroke: var(--suggestion); stroke-width: 5; }

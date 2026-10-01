@@ -7,6 +7,7 @@ export const etat = {
   jourChoisi: null, // « AAAA-MM-JJ »
   selection: null, // { type: 'poste' | 'salle', id }
   suggestions: [], // salles proposées par « Salle libre maintenant »
+  equipe: null, // carte C : { presents: [postes], conseil } pour le jour affiché
   moi: localStorage.getItem('maplace.qui') || 'e001',
 };
 

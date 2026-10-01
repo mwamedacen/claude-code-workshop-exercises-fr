@@ -34,7 +34,9 @@ export function dessinerPlan(app) {
     const etatPoste = !r ? 'libre' : r.employe_id === etat.moi ? 'moi' : 'occupe';
     const qui = etatPoste === 'libre' ? 'libre' : etatPoste === 'moi' ? 'réservé par vous' : `réservé par ${r.qui}`;
     const choisi = etat.selection && etat.selection.id === p.id ? ' selection' : '';
-    morceaux.push(`<rect class="poste ${etatPoste}${choisi}" data-type="poste" data-id="${h(p.id)}" x="${p.x}" y="${p.y}" width="${p.w}" height="${p.h}" rx="6" role="button" tabindex="0" aria-label="${h(`Poste ${p.id}, zone ${nomEquipe(p.zone)}, ${qui}`)}"></rect>`);
+    const equipe = etat.equipe && etat.equipe.presents.includes(p.id) ? ' equipe' : '';
+    const conseil = etat.equipe && etat.equipe.conseil === p.id ? ' conseil' : '';
+    morceaux.push(`<rect class="poste ${etatPoste}${choisi}${equipe}${conseil}" data-type="poste" data-id="${h(p.id)}" x="${p.x}" y="${p.y}" width="${p.w}" height="${p.h}" rx="6" role="button" tabindex="0" aria-label="${h(`Poste ${p.id}, zone ${nomEquipe(p.zone)}, ${qui}`)}"></rect>`);
     morceaux.push(`<text x="${p.x + p.w / 2}" y="${p.y + p.h / 2 + 4}" text-anchor="middle">${h(p.id)}</text>`);
   }
   morceaux.push('</svg>');

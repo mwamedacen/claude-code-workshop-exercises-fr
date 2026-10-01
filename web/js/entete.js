@@ -16,6 +16,7 @@ export function afficherEntete(app) {
   $('etage').textContent = etat.plan.etage;
   $('btn-mes-reservations').addEventListener('click', () => app.afficherMesReservations());
   $('btn-salle-libre').addEventListener('click', () => app.demanderSalleLibre());
+  $('btn-equipe').addEventListener('click', () => app.afficherEquipe());
   $('agenda').addEventListener('click', (e) => e.preventDefault()); // pas encore disponible
 }
 
