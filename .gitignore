@@ -1,0 +1,17 @@
+# Généré au lancement ou par les outils : jamais dans Git
+node_modules/
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+data/*.db
+data/*.db-journal
+data/*.db-wal
+data/*.db-shm
+.claude/worktrees/
+.claude/settings.local.json
+.playwright-mcp/
+captures/
+.sabotage.json
+qa/rapport/
+qa/verdict.json
+.DS_Store

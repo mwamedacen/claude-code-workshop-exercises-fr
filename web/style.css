@@ -1,0 +1,35 @@
+/* Ma Place - feuille de style (2005) */
+body { font-family: "Times New Roman", Times, serif; font-size: 15px; margin: 8px; background: #ffffff; color: #000000; }
+h1 { font-size: 26px; margin: 0; color: #003399; }
+.sous-titre { color: #666666; font-style: italic; }
+.entete { border-bottom: 2px solid #999999; margin-bottom: 6px; }
+.outils { font-size: 13px; }
+a { color: #0000ee; }
+a:visited { color: #551a8b; }
+.bientot { color: #aaaaaa; }
+#horloge { color: #cc0000; }
+#branche { color: #666666; font-family: "Courier New", monospace; font-size: 12px; }
+#jours { margin: 6px 0; }
+#jours a { margin-right: 10px; }
+#jours a.choisi { font-weight: bold; background: #ffff99; }
+.principal td { border: 1px solid #cccccc; padding: 6px; }
+#panneau table { border-collapse: collapse; margin-top: 4px; }
+#panneau td, #panneau th { border: 1px solid #999999; padding: 2px 6px; text-align: left; }
+#panneau h3 { margin: 0 0 4px 0; color: #003399; }
+#mes-reservations { margin-top: 10px; }
+svg { background: #ffffff; }
+svg text { font-family: Arial, Helvetica, sans-serif; font-size: 11px; fill: #333333; }
+.zone { fill: #f7f7f7; stroke: #bbbbbb; stroke-dasharray: 4 3; }
+.zone-nom { font-weight: bold; font-size: 12px; }
+.decor { fill: #eeeeee; stroke: #cccccc; }
+.poste { stroke: #333333; stroke-width: 1; cursor: pointer; }
+.poste.libre { fill: #b3e5b3; }
+.poste.occupe { fill: #f2a7a7; }
+.poste.moi { fill: #9ec5fe; }
+.salle rect { fill: #e8eefc; stroke: #333333; cursor: pointer; }
+.salle.pleine rect { fill: #f9d6a5; }
+.selection { stroke: #ff6600 !important; stroke-width: 3 !important; }
+.legende-case { display: inline-block; width: 12px; height: 12px; border: 1px solid #333; margin: 0 4px 0 12px; vertical-align: middle; }
+.erreur { color: #cc0000; font-weight: bold; }
+.ok { color: #008800; font-weight: bold; }
+.pied { color: #999999; font-size: 12px; }
