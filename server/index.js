@@ -270,16 +270,17 @@ export async function demarrer(options = {}) {
       }
 
       if (req.method === 'GET' && p === '/api/export.csv') {
+        // Pas de données personnelles dans un export (CLAUDE.md) : l'identifiant et l'équipe suffisent.
         const lignes = db
           .prepare(
-            `SELECT r.jour, r.type, r.ressource, r.debut, r.fin, e.first_name, e.last_name, e.email
+            `SELECT r.jour, r.type, r.ressource, r.debut, r.fin, r.employe_id, e.team
              FROM reservations r JOIN employees e ON e.id = r.employe_id ORDER BY r.jour, r.id`,
           )
           .all();
         const csv = [
-          'jour;type;ressource;debut;fin;prenom;nom;email',
+          'jour;type;ressource;debut;fin;employe;equipe',
           ...lignes.map((r) =>
-            [r.jour, r.type, r.ressource, r.debut ?? '', r.fin ?? '', r.first_name, r.last_name, r.email].join(';'),
+            [r.jour, r.type, r.ressource, r.debut ?? '', r.fin ?? '', r.employe_id, r.team].join(';'),
           ),
         ].join('\n');
         res.writeHead(200, { 'Content-Type': 'text/csv; charset=utf-8' });
