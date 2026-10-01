@@ -62,8 +62,9 @@ function normaliserHeure(h) {
 }
 
 function chevauche(a, b) {
-  // deux créneaux se chevauchent si l'un commence avant la fin de l'autre
-  return a.debut < b.fin && b.debut < a.fin;
+  // Deux créneaux se chevauchent si l'un commence avant la fin de l'autre.
+  // On compare des minutes : comparer les textes « 9h30 » et « 10h00 » donnait un faux résultat.
+  return enMinutes(a.debut) < enMinutes(b.fin) && enMinutes(b.debut) < enMinutes(a.fin);
 }
 
 function json(res, statut, donnees) {
