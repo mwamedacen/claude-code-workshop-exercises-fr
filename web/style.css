@@ -1,36 +1,204 @@
-/* Ma Place - feuille de style (2005) */
-body { font-family: "Times New Roman", Times, serif; font-size: 15px; margin: 8px; background: #ffffff; color: #000000; }
-h1 { font-size: 26px; margin: 0; color: #003399; }
-.sous-titre { color: #666666; font-style: italic; }
-.entete { border-bottom: 2px solid #999999; margin-bottom: 6px; }
-.outils { font-size: 13px; }
-a { color: #0000ee; }
-a:visited { color: #551a8b; }
-.bientot { color: #aaaaaa; }
-#horloge { color: #cc0000; }
-#branche { color: #666666; font-family: "Courier New", monospace; font-size: 12px; }
-#jours { margin: 6px 0; }
-#jours a { margin-right: 10px; }
-#jours a.choisi { font-weight: bold; background: #ffff99; }
-.principal td { border: 1px solid #cccccc; padding: 6px; }
-#panneau table { border-collapse: collapse; margin-top: 4px; }
-#panneau td, #panneau th { border: 1px solid #999999; padding: 2px 6px; text-align: left; }
-#panneau h3 { margin: 0 0 4px 0; color: #003399; }
-#mes-reservations { margin-top: 10px; }
-svg { background: #ffffff; }
-svg text { font-family: Arial, Helvetica, sans-serif; font-size: 11px; fill: #333333; }
-.zone { fill: #f7f7f7; stroke: #bbbbbb; stroke-dasharray: 4 3; }
-.zone-nom { font-weight: bold; font-size: 12px; }
-.decor { fill: #eeeeee; stroke: #cccccc; }
-.poste { stroke: #333333; stroke-width: 1; cursor: pointer; }
-.poste.libre { fill: #b3e5b3; }
-.poste.occupe { fill: #f2a7a7; }
-.poste.moi { fill: #9ec5fe; }
-.salle rect { fill: #e8eefc; stroke: #333333; cursor: pointer; }
-.salle.pleine rect { fill: #f9d6a5; }
-.selection { stroke: #ff6600 !important; stroke-width: 3 !important; }
-.salle.suggestion rect { stroke: #2e7d32; stroke-width: 5; }
-.legende-case { display: inline-block; width: 12px; height: 12px; border: 1px solid #333; margin: 0 4px 0 12px; vertical-align: middle; }
-.erreur { color: #cc0000; font-weight: bold; }
-.ok { color: #008800; font-weight: bold; }
-.pied { color: #999999; font-size: 12px; }
+/* Ma Place — charte graphique (voir le skill « charte » du projet).
+   Toutes les couleurs passent par les variables ci-dessous ; le thème sombre suit le réglage du système. */
+
+:root {
+  --fond: #f3f5fa;
+  --carte: #ffffff;
+  --texte: #182033;
+  --texte-doux: #5d6780;
+  --bord: #e1e6f0;
+  --marque: #2f5bea;
+  --marque-texte: #ffffff;
+  --marque-doux: #e7edff;
+  --libre: #d4f3dc;
+  --libre-bord: #2f9e55;
+  --pris: #f6dede;
+  --pris-bord: #c85d5d;
+  --moi: #d6e0ff;
+  --moi-bord: #2f5bea;
+  --salle: #eef1f8;
+  --salle-bord: #b9c2d6;
+  --salle-demandee: #ffe8c7;
+  --suggestion: #1f9d55;
+  --zone: #fafbfe;
+  --zone-bord: #d9dfeb;
+  --decor: #eceff5;
+  --alerte: #b42318;
+  --succes: #157a3c;
+  --rayon: 14px;
+  --rayon-petit: 8px;
+  --ombre: 0 1px 2px rgba(16, 24, 40, 0.06), 0 6px 20px rgba(16, 24, 40, 0.06);
+  --police: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fond: #0c1120;
+    --carte: #141b2d;
+    --texte: #e9edf7;
+    --texte-doux: #9aa5bf;
+    --bord: #253050;
+    --marque: #7d95ff;
+    --marque-texte: #0c1120;
+    --marque-doux: #1d284a;
+    --libre: #173826;
+    --libre-bord: #4fcb79;
+    --pris: #3b2226;
+    --pris-bord: #e58080;
+    --moi: #23305f;
+    --moi-bord: #7d95ff;
+    --salle: #1a2236;
+    --salle-bord: #34405f;
+    --salle-demandee: #45341a;
+    --suggestion: #4fcb79;
+    --zone: #10172a;
+    --zone-bord: #253050;
+    --decor: #161e33;
+    --alerte: #ff8a80;
+    --succes: #6fdc93;
+    --ombre: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35);
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--police);
+  font-size: 15px;
+  line-height: 1.45;
+  background: var(--fond);
+  color: var(--texte);
+}
+
+/* En-tête */
+.barre {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 24px;
+  padding: 14px 24px;
+  background: var(--carte);
+  border-bottom: 1px solid var(--bord);
+}
+.marque { display: flex; align-items: center; gap: 12px; margin-right: auto; }
+.logo {
+  display: grid; place-items: center;
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  background: var(--marque);
+  color: var(--marque-texte);
+  font-size: 22px;
+}
+h1 { margin: 0; font-size: 20px; letter-spacing: -0.01em; }
+.sous-titre { margin: 0; color: var(--texte-doux); font-size: 13px; }
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.qui { color: var(--texte-doux); font-size: 13px; display: flex; align-items: center; gap: 6px; }
+.infos { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; width: 100%; justify-content: flex-end; font-size: 12px; }
+
+select, input {
+  font: inherit;
+  color: var(--texte);
+  background: var(--carte);
+  border: 1px solid var(--bord);
+  border-radius: var(--rayon-petit);
+  padding: 6px 8px;
+}
+input[type="number"] { width: 70px; }
+
+.bouton {
+  font: inherit;
+  font-weight: 600;
+  border: 1px solid var(--marque);
+  background: var(--marque);
+  color: var(--marque-texte);
+  border-radius: 999px;
+  padding: 7px 14px;
+  cursor: pointer;
+}
+.bouton:hover { filter: brightness(1.08); }
+.bouton.secondaire { background: transparent; color: var(--marque); }
+.bouton.petit { padding: 4px 10px; font-size: 13px; }
+.bouton.danger { background: transparent; color: var(--alerte); border-color: var(--alerte); }
+.bouton:focus-visible, a:focus-visible, [role="button"]:focus-visible { outline: 3px solid var(--marque); outline-offset: 2px; }
+
+.pastille {
+  border-radius: 999px;
+  padding: 2px 10px;
+  border: 1px solid var(--bord);
+  color: var(--texte-doux);
+}
+.pastille.alerte { color: var(--alerte); border-color: var(--alerte); }
+.pastille.discrete { font-family: var(--mono); }
+.lien-inactif { color: var(--texte-doux); opacity: 0.7; text-decoration: none; cursor: not-allowed; }
+
+/* Jours */
+.jours { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px 24px 0; }
+.jours a {
+  text-decoration: none;
+  color: var(--texte);
+  background: var(--carte);
+  border: 1px solid var(--bord);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: 13px;
+}
+.jours a.choisi { background: var(--marque); border-color: var(--marque); color: var(--marque-texte); font-weight: 600; }
+.jours .separateur { width: 12px; }
+
+/* Mise en page */
+.contenu { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 18px; padding: 18px 24px 24px; }
+@media (max-width: 1000px) { .contenu { grid-template-columns: 1fr; } }
+.colonne { display: flex; flex-direction: column; gap: 18px; }
+.carte { background: var(--carte); border: 1px solid var(--bord); border-radius: var(--rayon); box-shadow: var(--ombre); padding: 16px 18px; }
+.carte h2, .carte h3 { margin: 0 0 10px; font-size: 17px; }
+.vide { color: var(--texte-doux); font-style: italic; }
+
+/* Plan */
+.plan svg { display: block; width: 100%; height: auto; }
+.plan text { font-family: var(--police); font-size: 14px; fill: var(--texte-doux); pointer-events: none; }
+.zone { fill: var(--zone); stroke: var(--zone-bord); stroke-dasharray: 5 4; }
+.zone-nom { font-weight: 700; font-size: 15px !important; fill: var(--texte) !important; }
+.decor { fill: var(--decor); stroke: var(--bord); }
+.poste { stroke-width: 1.5; cursor: pointer; rx: 6; }
+.poste.libre { fill: var(--libre); stroke: var(--libre-bord); }
+.poste.occupe { fill: var(--pris); stroke: var(--pris-bord); }
+.poste.moi { fill: var(--moi); stroke: var(--moi-bord); stroke-width: 2.5; }
+.salle rect { fill: var(--salle); stroke: var(--salle-bord); stroke-width: 1.5; cursor: pointer; rx: 10; }
+.salle.pleine rect { fill: var(--salle-demandee); }
+.salle.suggestion rect { stroke: var(--suggestion); stroke-width: 5; }
+.salle-nom { font-weight: 700; fill: var(--texte) !important; font-size: 16px !important; }
+.selection { stroke: var(--marque) !important; stroke-width: 4 !important; }
+
+.legende { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 12px; color: var(--texte-doux); font-size: 13px; }
+.legende span { display: inline-flex; align-items: center; gap: 6px; }
+.legende i { width: 14px; height: 14px; border-radius: 4px; border: 1.5px solid; display: inline-block; }
+
+/* Panneau */
+.fiche { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; margin: 0 0 12px; }
+.fiche dt { color: var(--texte-doux); }
+.fiche dd { margin: 0; font-weight: 600; }
+.puces { display: flex; flex-wrap: wrap; gap: 6px; }
+.puce { background: var(--marque-doux); color: var(--texte); border-radius: 999px; padding: 1px 10px; font-size: 12px; font-weight: 600; }
+.reunions { list-style: none; padding: 0; margin: 0 0 12px; display: grid; gap: 6px; }
+.reunions li { display: flex; justify-content: space-between; gap: 8px; padding: 6px 10px; border-radius: var(--rayon-petit); background: var(--fond); font-size: 14px; }
+.formulaire { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 8px 0 12px; }
+.formulaire label { display: flex; align-items: center; gap: 6px; color: var(--texte-doux); font-size: 13px; }
+.message.ok { color: var(--succes); font-weight: 600; }
+.message.erreur { color: var(--alerte); font-weight: 600; }
+
+/* Mes réservations */
+.mes-liste { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.mes-liste li { display: grid; grid-template-columns: 84px 1fr; align-items: center; gap: 6px 10px; padding: 10px 12px; border: 1px solid var(--bord); border-radius: var(--rayon-petit); }
+.mes-liste .quand { font-weight: 700; }
+.mes-liste .actions { grid-column: 1 / -1; display: flex; justify-content: flex-end; align-items: center; gap: 8px; }
+.mes-liste .arrive { color: var(--succes); font-weight: 600; font-size: 13px; }
+
+/* Salle libre maintenant */
+.resultats { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 6px; }
+.resultats a { display: flex; justify-content: space-between; gap: 8px; padding: 8px 10px; border-radius: var(--rayon-petit); background: var(--fond); color: var(--texte); text-decoration: none; }
+.resultats a:hover { outline: 2px solid var(--suggestion); }
+
+.pied { color: var(--texte-doux); font-size: 12px; text-align: center; padding: 0 24px 24px; }

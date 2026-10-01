@@ -1,42 +1,47 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<title>Ma Place</title>
-<link rel="icon" href="data:,">
-<link rel="stylesheet" href="style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ma Place</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<table width="100%" class="entete" cellspacing="0">
-  <tr>
-    <td>
-      <h1>Ma Place</h1>
-      <div class="sous-titre">Réservez votre poste ou votre salle de réunion &mdash; <span id="etage">3e étage</span></div>
-    </td>
-    <td align="right" class="outils">
-      Qui suis-je ? <select id="qui"></select> <button id="btn-mes-reservations">Mes réservations</button> <button id="btn-salle-libre">Salle libre maintenant</button><br>
-      <span id="horloge"></span> <span id="branche"></span><br>
-      <a href="#" id="agenda" class="bientot" aria-disabled="true">Ajouter à mon agenda (bientôt)</a>
-    </td>
-  </tr>
-</table>
+  <header class="barre">
+    <div class="marque">
+      <span class="logo" aria-hidden="true">◧</span>
+      <div>
+        <h1>Ma Place</h1>
+        <p class="sous-titre">Postes et salles de réunion · <span id="etage">3e étage</span></p>
+      </div>
+    </div>
+    <div class="actions">
+      <label class="qui">Qui suis-je ? <select id="qui"></select></label>
+      <button id="btn-mes-reservations" class="bouton secondaire">Mes réservations</button>
+      <button id="btn-salle-libre" class="bouton">Salle libre maintenant</button>
+    </div>
+    <div class="infos">
+      <span id="horloge" class="pastille alerte" hidden></span>
+      <span id="branche" class="pastille discrete" hidden></span>
+      <a href="#" id="agenda" class="lien-inactif" aria-disabled="true">Ajouter à mon agenda (bientôt)</a>
+    </div>
+  </header>
 
-<div id="jours"></div>
+  <nav id="jours" class="jours" aria-label="Choix du jour"></nav>
 
-<table class="principal" width="100%" cellspacing="0">
-  <tr>
-    <td valign="top">
-      <div id="plan">Chargement du plan&hellip;</div>
-      <div id="legende"></div>
-    </td>
-    <td valign="top" width="340">
-      <div id="panneau"><p><i>Cliquez sur un poste ou une salle du plan.</i></p></div>
-      <div id="mes-reservations" style="display:none"></div>
-    </td>
-  </tr>
-</table>
+  <main class="contenu">
+    <section class="carte carte-plan">
+      <div id="plan" class="plan">Chargement du plan…</div>
+      <div id="legende" class="legende"></div>
+    </section>
+    <aside class="colonne">
+      <section id="panneau" class="carte panneau"></section>
+      <section id="mes-reservations" class="carte" hidden></section>
+    </aside>
+  </main>
 
-<p class="pied">Ma Place v0.3 &mdash; application interne &mdash; <a href="#" onclick="return false">Aide</a></p>
-<script src="app.js"></script>
+  <footer class="pied">Ma Place v0.4 · application interne · données fictives</footer>
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>

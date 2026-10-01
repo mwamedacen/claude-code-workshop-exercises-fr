@@ -11,7 +11,7 @@ Réservation de postes et de salles de réunion pour un étage en flex office. D
 ## Architecture
 
 - `server/index.js` : serveur HTTP et toutes les routes `/api/...`. `server/db.js` : base SQLite (`node:sqlite`) et données de démonstration. `server/dates.js` : jours et heures.
-- `web/` : l'interface (HTML, `app.js`, CSS), sans framework ni étape de build.
+- `web/` : l'interface, sans framework ni étape de build. `web/js/` : un module par partie de l'écran (`plan.js`, `panneau.js`, `liste.js`, `salle-libre.js`, `entete.js`), reliés par `main.js`. Le look suit le skill « charte ».
 - `data/floor-plan.json` : le plan de l'étage. `data/employees.json` : les personnes (fictives).
 
 ## Règles (tirées de nos erreurs)
