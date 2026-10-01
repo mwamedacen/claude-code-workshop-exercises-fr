@@ -20,6 +20,11 @@ import { fileURLToPath } from 'node:url';
 // MA_PLACE_COURSE_REPO replaces it (the trainer-side tests point it at a local repository).
 export const COURSE_REPO = process.env.MA_PLACE_COURSE_REPO || 'https://github.com/mwamedacen/claude-code-training-fr.git';
 
+// The original Day 1 tags remain available for existing copies. New template copies use
+// additive French-guide tags so no public tag or branch history needs to be rewritten.
+const FRENCH_DAY1 = new Set(['w1-depart', 'w2-depart', 'w2-correctif', 'w3-depart', 'w3-regles', 'w3-fonction', 'w4-depart', 'w4-analyses']);
+export const courseTag = (name) => FRENCH_DAY1.has(name) ? `fr-${name}` : name;
+
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 // Course order, and what each checkpoint holds (design of 2026-10-01, « Checkpoints »).
@@ -218,8 +223,8 @@ function goTo(name) {
     return 1;
   }
 
-  const wanted = name === 'w5-fusion' ? [name, ...CARDS.map((c) => c.tag)] : [name];
-  if (ensureTags(wanted).includes(name)) {
+  const wanted = name === 'w5-fusion' ? [name, ...CARDS.map((c) => c.tag)] : [courseTag(name)];
+  if (ensureTags(wanted).includes(courseTag(name))) {
     console.log(`✘ Impossible de récupérer le point de reprise ${name} : vérifiez votre connexion, puis relancez.`);
     console.log("  Rien n'a été modifié.");
     return 1;
@@ -243,7 +248,7 @@ function goTo(name) {
 
   // 2. A new working branch at the checkpoint.
   const work = uniqueBranch(`travail-${name}`);
-  const r = git(['switch', '-c', work, `refs/tags/${name}^{commit}`]);
+  const r = git(['switch', '-c', work, `refs/tags/${courseTag(name)}^{commit}`]);
   if (r.code !== 0) {
     console.log(`✘ Impossible de passer au point de reprise ${name} : ${firstLine(r.err) || 'git switch a échoué'}`);
     if (saved) console.log(`  Votre travail est sauvegardé sur la branche ${saved}.`);
@@ -289,7 +294,7 @@ function list() {
   console.log("Points de reprise de l'atelier Ma Place, dans l'ordre du cours :");
   console.log('');
   for (const p of POINTS) {
-    const commit = tags?.get(p.name);
+    const commit = tags?.get(courseTag(p.name));
     const mark = !tags ? '•' : commit ? '✔' : '○';
     const here = commit && commit === head ? '   ← vous êtes ici' : '';
     console.log(`${mark} ${p.name.padEnd(width)}  ${p.description}${here}`);
