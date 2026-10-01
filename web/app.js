@@ -96,6 +96,7 @@ function afficherEntete() {
   }
   if (info.branche) document.getElementById('branche').textContent = '[branche : ' + info.branche + ']';
   document.getElementById('etage').textContent = plan.etage;
+  document.getElementById('btn-mes-reservations').addEventListener('click', afficherMesReservations);
   document.getElementById('agenda').addEventListener('click', function (e) {
     e.preventDefault(); // pas encore disponible
   });
@@ -279,7 +280,7 @@ function afficherPanneau() {
     html += '<tr><th>Jour</th><td>' + dateFr(jourChoisi) + '</td></tr>';
     html += '<tr><th>État</th><td>' + (!r ? 'Libre' : r.employe_id == moi ? 'Réservé par vous' : 'Réservé par ' + r.qui) + '</td></tr>';
     html += '</table>';
-    // TODO bouton « Réserver » (la fonction reserver() existe plus bas)
+    if (!r) html += '<p><button id="btn-reserver" onclick="reserver()">Réserver</button></p>';
   } else {
     var salle = trouverSalle(selectedItem.id);
     var liste = reservationsSalle(salle.id);
@@ -303,7 +304,7 @@ function afficherPanneau() {
     html += 'Début <select id="debut">' + optionsHeures('9h00') + '</select> ';
     html += 'Fin <select id="fin">' + optionsHeures('10h00') + '</select><br>';
     html += 'Personnes <input id="nb" type="number" min="1" value="2" style="width:50px"></p>';
-    // TODO bouton « Réserver » ici aussi
+    html += '<p><button id="btn-reserver" onclick="reserver()">Réserver</button></p>';
   }
   html += '<div id="message"></div>';
   div.innerHTML = html;
@@ -318,7 +319,7 @@ function message(texte, ok) {
 // Fonctions prêtes mais pas encore branchées à l'écran
 // ---------------------------------------------------------------------------
 
-// TODO bouton : réserver le poste ou la salle sélectionnés
+// Réserver le poste ou la salle sélectionnés (bouton « Réserver » du panneau)
 function reserver() {
   if (!selectedItem) return;
   var corps = { type: selectedItem.type, ressource: selectedItem.id, employe: moi, jour: jourChoisi };
@@ -331,6 +332,7 @@ function reserver() {
     .then(function () {
       return chargerJour().then(function () {
         message('Réservation enregistrée.', true);
+        if (document.getElementById('mes-reservations').style.display == 'block') afficherMesReservations();
       });
     })
     .catch(function (e) {
@@ -338,7 +340,7 @@ function reserver() {
     });
 }
 
-// TODO bouton : afficher mes réservations (avec, pour chacune, « Annuler » et « Je suis arrivé·e »)
+// Afficher mes réservations (bouton « Mes réservations » de l'en-tête)
 function afficherMesReservations() {
   return api('GET', '/api/mes-reservations?employe=' + moi).then(function (liste) {
     var div = document.getElementById('mes-reservations');
@@ -349,8 +351,8 @@ function afficherMesReservations() {
       for (var i = 0; i < liste.length; i++) {
         var r = liste[i];
         var quoi = r.type == 'poste' ? 'Poste ' + r.ressource : 'Salle ' + (trouverSalle(r.ressource) || { name: r.ressource }).name + ' ' + r.debut + ' - ' + r.fin;
-        html += '<tr><td>' + fmtDate(r.jour) + '</td><td>' + quoi + '</td><td>' + (r.arrivee_le ? 'arrivé·e' : '') + '</td></tr>';
-        // TODO boutons « Annuler » -> annuler(i) et « Je suis arrivé·e » -> arrivee(r.id)
+        html += '<tr><td>' + fmtDate(r.jour) + '</td><td>' + quoi + '</td><td>' + (r.arrivee_le ? 'arrivé·e' : '<button onclick="arrivee(' + r.id + ')">Je suis arrivé·e</button>') + '</td>' +
+          '<td><button onclick="annuler(' + i + ')">Annuler</button></td></tr>';
       }
       html += '</table>';
     }
@@ -364,7 +366,7 @@ function erreurListe(texte) {
   div.innerHTML += '<p class="erreur">' + texte + '</p>';
 }
 
-// TODO bouton : annuler la réservation numéro "position" de MA liste
+// Annuler la réservation numéro "position" de MA liste (bouton « Annuler »)
 function annuler(position) {
   return api('DELETE', '/api/mes-reservations/' + position + '?employe=' + moi)
     .then(function () {
@@ -378,7 +380,7 @@ function annuler(position) {
     });
 }
 
-// TODO bouton : signaler mon arrivée
+// Signaler mon arrivée (bouton « Je suis arrivé·e »)
 function arrivee(id) {
   return api('POST', '/api/reservations/' + id + '/arrivee', { employe: moi })
     .then(function () {
