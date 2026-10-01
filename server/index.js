@@ -47,11 +47,12 @@ function brancheGit() {
   }
 }
 
-// Encore une façon de calculer une date (voir aussi dates.js et web/app.js).
+// « AAAA-MM-JJ » -> la même clé, après vérification. Surtout pas toISOString() :
+// il passe en UTC et, à Paris, minuit devient la veille à 22h ou 23h.
 function jourDepuis(texte) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(String(texte || ''))) return null;
   const [a, m, j] = texte.split('-').map(Number);
-  const d = new Date(a, m - 1, j);
-  return d.toISOString().slice(0, 10);
+  return cleDuJour(new Date(a, m - 1, j));
 }
 
 // Met une heure au format maison « 9h30 » (accepte aussi « 09:30 »).
@@ -168,8 +169,8 @@ export async function demarrer(options = {}) {
         if (!qui) return json(res, 400, { erreur: 'Qui êtes-vous ? Choisissez votre nom en haut de la page.' });
 
         const aujourdhui = cleDuJour(maintenant());
-        // optimisation : pour aujourd'hui, pas besoin de recalculer la date
-        const jour = !corps.jour || corps.jour === aujourdhui ? aujourdhui : jourDepuis(corps.jour);
+        const jour = corps.jour ? jourDepuis(corps.jour) : aujourdhui;
+        if (!jour) return json(res, 400, { erreur: 'Jour invalide.' });
         const limite = cleDuJour(ajouterJours(maintenant(), CONFIG.joursMax));
         if (jour < aujourdhui || jour > limite) {
           return json(res, 400, { erreur: `On peut réserver d'aujourd'hui à J+${CONFIG.joursMax}.` });
@@ -203,7 +204,7 @@ export async function demarrer(options = {}) {
           return json(res, 400, { erreur: "L'étage est ouvert de 8h à 19h." });
         }
         const nb = Number(corps.nb || 1);
-        if (nb > salle.places) return json(res, 409, { erreur: `Trop de monde pour la salle ${salle.name}.` });
+        if (nb > salle.capacite) return json(res, 409, { erreur: `Trop de monde pour la salle ${salle.name} (${salle.capacite} places).` });
         const existantes = db
           .prepare("SELECT debut, fin FROM reservations WHERE type = 'salle' AND ressource = ? AND jour = ?")
           .all(ressource, jour);
@@ -232,9 +233,13 @@ export async function demarrer(options = {}) {
 
       const annulation = /^\/api\/mes-reservations\/(\d+)$/.exec(p);
       if (req.method === 'DELETE' && annulation) {
+        // La position est celle de la réservation dans MA liste (même ordre que /api/mes-reservations).
+        const employe = url.searchParams.get('employe') || '';
         const position = Number(annulation[1]);
-        const toutes = db.prepare('SELECT id FROM reservations ORDER BY id').all();
-        const r = toutes[position];
+        const miennes = db
+          .prepare('SELECT id FROM reservations WHERE employe_id = ? AND jour >= ? ORDER BY jour, id')
+          .all(employe, cleDuJour(maintenant()));
+        const r = miennes[position];
         if (!r) return json(res, 404, { erreur: 'Réservation introuvable.' });
         db.prepare('DELETE FROM reservations WHERE id = ?').run(r.id);
         return json(res, 200, { ok: true });
@@ -242,8 +247,24 @@ export async function demarrer(options = {}) {
 
       const arrivee = /^\/api\/reservations\/(\d+)\/arrivee$/.exec(p);
       if (req.method === 'POST' && arrivee) {
-        const r = db.prepare('SELECT id FROM reservations WHERE id = ?').get(Number(arrivee[1]));
+        const corps = await lireCorps(req);
+        const r = db
+          .prepare('SELECT id, employe_id, type, jour, debut, fin FROM reservations WHERE id = ?')
+          .get(Number(arrivee[1]));
         if (!r) return json(res, 404, { erreur: 'Réservation introuvable.' });
+        if (corps.employe && corps.employe !== r.employe_id) {
+          return json(res, 403, { erreur: "Ce n'est pas votre réservation." });
+        }
+        const ici = maintenant();
+        if (r.jour !== cleDuJour(ici)) {
+          return json(res, 409, { erreur: "On ne signale son arrivée que le jour de la réservation." });
+        }
+        if (r.type === 'salle') {
+          const minutes = ici.getHours() * 60 + ici.getMinutes();
+          if (minutes < enMinutes(r.debut) - 15 || minutes >= enMinutes(r.fin)) {
+            return json(res, 409, { erreur: 'On signale son arrivée pendant la réunion, au plus tôt 15 minutes avant.' });
+          }
+        }
         db.prepare('UPDATE reservations SET arrivee_le = ? WHERE id = ?').run(maintenant().toISOString(), r.id);
         return json(res, 200, { ok: true });
       }
