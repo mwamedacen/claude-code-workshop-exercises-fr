@@ -20,4 +20,4 @@ Chaque ligne de « Mes réservations » propose « Ajouter à mon agenda » : un
 
 ## Contrôle
 
-Retirer le `todo` de chaque test de `test/acceptation/carte-d.test.js` : rouge puis vert, puis `npm test`. Dans le navigateur, en Camille : « Mes réservations », un lien par ligne, le fichier s'ouvre dans l'agenda.
+Retirer le `todo` de chaque test de `test/acceptation/carte-d.test.js` : rouge puis vert, puis `npm test`. Ne pas lancer l'application dans la session cloud. Au retour, en local et en Camille : « Mes réservations », un lien par ligne, le fichier s'ouvre dans l'agenda.
