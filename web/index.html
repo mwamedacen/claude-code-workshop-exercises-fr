@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Ma Place</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<table width="100%" class="entete" cellspacing="0">
+  <tr>
+    <td>
+      <h1>Ma Place</h1>
+      <div class="sous-titre">Réservez votre poste ou votre salle de réunion &mdash; <span id="etage">3e étage</span></div>
+    </td>
+    <td align="right" class="outils">
+      Qui suis-je ? <select id="qui"></select><br>
+      <span id="horloge"></span> <span id="branche"></span><br>
+      <a href="#" id="agenda" class="bientot" aria-disabled="true">Ajouter à mon agenda (bientôt)</a>
+    </td>
+  </tr>
+</table>
+
+<div id="jours"></div>
+
+<table class="principal" width="100%" cellspacing="0">
+  <tr>
+    <td valign="top">
+      <div id="plan">Chargement du plan&hellip;</div>
+      <div id="legende"></div>
+    </td>
+    <td valign="top" width="340">
+      <div id="panneau"><p><i>Cliquez sur un poste ou une salle du plan.</i></p></div>
+      <div id="mes-reservations" style="display:none"></div>
+    </td>
+  </tr>
+</table>
+
+<p class="pied">Ma Place v0.3 &mdash; application interne &mdash; <a href="#" onclick="return false">Aide</a></p>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "name": "ma-place",
+  "version": "0.3.0",
+  "private": true,
+  "description": "Ma Place : réservation de postes et de salles. Application d'atelier, données fictives.",
+  "type": "module",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning server/index.js",
+    "test": "node --disable-warning=ExperimentalWarning --test",
+    "reset": "node tools/reset.mjs",
+    "python": "node tools/setup-python.mjs",
+    "check": "node --disable-warning=ExperimentalWarning tools/check.mjs",
+    "checkpoint": "node tools/checkpoint.mjs"
+  }
+}

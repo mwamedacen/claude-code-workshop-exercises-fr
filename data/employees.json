@@ -1,0 +1,962 @@
+[
+  {
+    "id": "e001",
+    "first_name": "Camille",
+    "last_name": "Martin",
+    "team": "marketing",
+    "email": "camille.martin@ma-place.example",
+    "persona": true
+  },
+  {
+    "id": "e002",
+    "first_name": "Hugo",
+    "last_name": "Bernard",
+    "team": "tech",
+    "email": "hugo.bernard@ma-place.example",
+    "persona": true
+  },
+  {
+    "id": "e003",
+    "first_name": "Léa",
+    "last_name": "Dubois",
+    "team": "rh",
+    "email": "lea.dubois@ma-place.example",
+    "persona": true
+  },
+  {
+    "id": "e004",
+    "first_name": "Karim",
+    "last_name": "Benali",
+    "team": "finance",
+    "email": "karim.benali@ma-place.example",
+    "persona": true
+  },
+  {
+    "id": "e005",
+    "first_name": "Sophie",
+    "last_name": "Laurent",
+    "team": "tech",
+    "email": "sophie.laurent@ma-place.example",
+    "persona": true
+  },
+  {
+    "id": "e006",
+    "first_name": "Thomas",
+    "last_name": "Petit",
+    "team": "marketing",
+    "email": "thomas.petit@ma-place.example",
+    "persona": true
+  },
+  {
+    "id": "e007",
+    "first_name": "Inès",
+    "last_name": "Moreau",
+    "team": "finance",
+    "email": "ines.moreau@ma-place.example",
+    "persona": true
+  },
+  {
+    "id": "e008",
+    "first_name": "Julien",
+    "last_name": "Roux",
+    "team": "tech",
+    "email": "julien.roux@ma-place.example",
+    "persona": true
+  },
+  {
+    "id": "e009",
+    "first_name": "Nadia",
+    "last_name": "Haddad",
+    "team": "rh",
+    "email": "nadia.haddad@ma-place.example",
+    "persona": true
+  },
+  {
+    "id": "e010",
+    "first_name": "Lucas",
+    "last_name": "Fontaine",
+    "team": "marketing",
+    "email": "lucas.fontaine@ma-place.example",
+    "persona": true
+  },
+  {
+    "id": "e011",
+    "first_name": "Maxime",
+    "last_name": "Roux",
+    "team": "tech",
+    "email": "maxime.roux@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e012",
+    "first_name": "Samir",
+    "last_name": "Perrin",
+    "team": "tech",
+    "email": "samir.perrin@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e013",
+    "first_name": "Claire",
+    "last_name": "Mercier",
+    "team": "rh",
+    "email": "claire.mercier@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e014",
+    "first_name": "Anaïs",
+    "last_name": "Fontaine",
+    "team": "finance",
+    "email": "anais.fontaine@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e015",
+    "first_name": "Hugo",
+    "last_name": "Petit",
+    "team": "finance",
+    "email": "hugo.petit@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e016",
+    "first_name": "Maxime",
+    "last_name": "Martin",
+    "team": "tech",
+    "email": "maxime.martin@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e017",
+    "first_name": "Lucie",
+    "last_name": "Marie",
+    "team": "marketing",
+    "email": "lucie.marie@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e018",
+    "first_name": "Marion",
+    "last_name": "Giraud",
+    "team": "marketing",
+    "email": "marion.giraud@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e019",
+    "first_name": "Anaïs",
+    "last_name": "Benali",
+    "team": "rh",
+    "email": "anais.benali@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e020",
+    "first_name": "Manon",
+    "last_name": "Joly",
+    "team": "rh",
+    "email": "manon.joly@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e021",
+    "first_name": "Romain",
+    "last_name": "Robin",
+    "team": "tech",
+    "email": "romain.robin@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e022",
+    "first_name": "Céline",
+    "last_name": "Francois",
+    "team": "tech",
+    "email": "celine.francois@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e023",
+    "first_name": "Laura",
+    "last_name": "Marchand",
+    "team": "marketing",
+    "email": "laura.marchand@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e024",
+    "first_name": "Inès",
+    "last_name": "Denis",
+    "team": "finance",
+    "email": "ines.denis@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e025",
+    "first_name": "Arnaud",
+    "last_name": "Roussel",
+    "team": "tech",
+    "email": "arnaud.roussel@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e026",
+    "first_name": "Nadia",
+    "last_name": "Lefebvre",
+    "team": "marketing",
+    "email": "nadia.lefebvre@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e027",
+    "first_name": "Olivier",
+    "last_name": "Blanchard",
+    "team": "marketing",
+    "email": "olivier.blanchard@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e028",
+    "first_name": "Fatou",
+    "last_name": "Francois",
+    "team": "marketing",
+    "email": "fatou.francois@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e029",
+    "first_name": "Samir",
+    "last_name": "Dufour",
+    "team": "rh",
+    "email": "samir.dufour@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e030",
+    "first_name": "Benoît",
+    "last_name": "Mathieu",
+    "team": "tech",
+    "email": "benoit.mathieu@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e031",
+    "first_name": "Romain",
+    "last_name": "Bernard",
+    "team": "rh",
+    "email": "romain.bernard@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e032",
+    "first_name": "Lucas",
+    "last_name": "Blanc",
+    "team": "rh",
+    "email": "lucas.blanc@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e033",
+    "first_name": "Julie",
+    "last_name": "Meyer",
+    "team": "tech",
+    "email": "julie.meyer@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e034",
+    "first_name": "Clara",
+    "last_name": "Chevalier",
+    "team": "tech",
+    "email": "clara.chevalier@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e035",
+    "first_name": "Léa",
+    "last_name": "Blanchard",
+    "team": "rh",
+    "email": "lea.blanchard@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e036",
+    "first_name": "Samir",
+    "last_name": "Mathieu",
+    "team": "marketing",
+    "email": "samir.mathieu@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e037",
+    "first_name": "Anaïs",
+    "last_name": "Mathieu",
+    "team": "finance",
+    "email": "anais.mathieu@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e038",
+    "first_name": "Romain",
+    "last_name": "Marie",
+    "team": "tech",
+    "email": "romain.marie@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e039",
+    "first_name": "Samir",
+    "last_name": "Fontaine",
+    "team": "finance",
+    "email": "samir.fontaine@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e040",
+    "first_name": "Fatou",
+    "last_name": "Lucas",
+    "team": "finance",
+    "email": "fatou.lucas@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e041",
+    "first_name": "Yasmine",
+    "last_name": "Gautier",
+    "team": "tech",
+    "email": "yasmine.gautier@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e042",
+    "first_name": "Sébastien",
+    "last_name": "Duval",
+    "team": "marketing",
+    "email": "sebastien.duval@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e043",
+    "first_name": "Benoît",
+    "last_name": "Bernard",
+    "team": "tech",
+    "email": "benoit.bernard@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e044",
+    "first_name": "Sonia",
+    "last_name": "Mercier",
+    "team": "marketing",
+    "email": "sonia.mercier@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e045",
+    "first_name": "Hugo",
+    "last_name": "Brunet",
+    "team": "tech",
+    "email": "hugo.brunet@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e046",
+    "first_name": "Sébastien",
+    "last_name": "Laurent",
+    "team": "tech",
+    "email": "sebastien.laurent@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e047",
+    "first_name": "Céline",
+    "last_name": "Riviere",
+    "team": "rh",
+    "email": "celine.riviere@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e048",
+    "first_name": "Camille",
+    "last_name": "Boyer",
+    "team": "rh",
+    "email": "camille.boyer@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e049",
+    "first_name": "Maxime",
+    "last_name": "Denis",
+    "team": "tech",
+    "email": "maxime.denis@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e050",
+    "first_name": "Marion",
+    "last_name": "Perrin",
+    "team": "marketing",
+    "email": "marion.perrin@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e051",
+    "first_name": "Damien",
+    "last_name": "Duval",
+    "team": "tech",
+    "email": "damien.duval@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e052",
+    "first_name": "Manon",
+    "last_name": "Moreau",
+    "team": "tech",
+    "email": "manon.moreau@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e053",
+    "first_name": "Claire",
+    "last_name": "Garnier",
+    "team": "tech",
+    "email": "claire.garnier@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e054",
+    "first_name": "Karim",
+    "last_name": "Mathieu",
+    "team": "rh",
+    "email": "karim.mathieu@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e055",
+    "first_name": "Aurélie",
+    "last_name": "Benali",
+    "team": "finance",
+    "email": "aurelie.benali@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e056",
+    "first_name": "Olivier",
+    "last_name": "Denis",
+    "team": "marketing",
+    "email": "olivier.denis@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e057",
+    "first_name": "Rachid",
+    "last_name": "Garnier",
+    "team": "tech",
+    "email": "rachid.garnier@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e058",
+    "first_name": "Céline",
+    "last_name": "Barbier",
+    "team": "tech",
+    "email": "celine.barbier@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e059",
+    "first_name": "Sébastien",
+    "last_name": "Haddad",
+    "team": "tech",
+    "email": "sebastien.haddad@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e060",
+    "first_name": "Céline",
+    "last_name": "Giraud",
+    "team": "finance",
+    "email": "celine.giraud@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e061",
+    "first_name": "Florian",
+    "last_name": "Brun",
+    "team": "rh",
+    "email": "florian.brun@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e062",
+    "first_name": "Mélanie",
+    "last_name": "Morin",
+    "team": "finance",
+    "email": "melanie.morin@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e063",
+    "first_name": "Aurélie",
+    "last_name": "Gauthier",
+    "team": "tech",
+    "email": "aurelie.gauthier@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e064",
+    "first_name": "Julie",
+    "last_name": "Barbier",
+    "team": "finance",
+    "email": "julie.barbier@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e065",
+    "first_name": "Florian",
+    "last_name": "Benali",
+    "team": "tech",
+    "email": "florian.benali@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e066",
+    "first_name": "Nadia",
+    "last_name": "Marie",
+    "team": "tech",
+    "email": "nadia.marie@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e067",
+    "first_name": "Maxime",
+    "last_name": "Dubois",
+    "team": "tech",
+    "email": "maxime.dubois@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e068",
+    "first_name": "Clara",
+    "last_name": "Giraud",
+    "team": "rh",
+    "email": "clara.giraud@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e069",
+    "first_name": "Antoine",
+    "last_name": "Duval",
+    "team": "rh",
+    "email": "antoine.duval@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e070",
+    "first_name": "Marion",
+    "last_name": "Dubois",
+    "team": "finance",
+    "email": "marion.dubois@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e071",
+    "first_name": "Maxime",
+    "last_name": "Perrin",
+    "team": "rh",
+    "email": "maxime.perrin@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e072",
+    "first_name": "Nicolas",
+    "last_name": "Roussel",
+    "team": "tech",
+    "email": "nicolas.roussel@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e073",
+    "first_name": "Marion",
+    "last_name": "Gautier",
+    "team": "finance",
+    "email": "marion.gautier@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e074",
+    "first_name": "Laura",
+    "last_name": "Masson",
+    "team": "finance",
+    "email": "laura.masson@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e075",
+    "first_name": "Hugo",
+    "last_name": "Joly",
+    "team": "marketing",
+    "email": "hugo.joly@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e076",
+    "first_name": "Thomas",
+    "last_name": "Gautier",
+    "team": "marketing",
+    "email": "thomas.gautier@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e077",
+    "first_name": "Chloé",
+    "last_name": "Haddad",
+    "team": "finance",
+    "email": "chloe.haddad@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e078",
+    "first_name": "Mélanie",
+    "last_name": "Henry",
+    "team": "rh",
+    "email": "melanie.henry@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e079",
+    "first_name": "Alexandre",
+    "last_name": "Marchand",
+    "team": "marketing",
+    "email": "alexandre.marchand@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e080",
+    "first_name": "Julien",
+    "last_name": "Boyer",
+    "team": "rh",
+    "email": "julien.boyer@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e081",
+    "first_name": "Lucas",
+    "last_name": "Blanchard",
+    "team": "finance",
+    "email": "lucas.blanchard@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e082",
+    "first_name": "Pauline",
+    "last_name": "Blanchard",
+    "team": "tech",
+    "email": "pauline.blanchard@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e083",
+    "first_name": "Mehdi",
+    "last_name": "Marchand",
+    "team": "finance",
+    "email": "mehdi.marchand@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e084",
+    "first_name": "Rachid",
+    "last_name": "Guerin",
+    "team": "tech",
+    "email": "rachid.guerin@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e085",
+    "first_name": "Florian",
+    "last_name": "Haddad",
+    "team": "tech",
+    "email": "florian.haddad@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e086",
+    "first_name": "Élodie",
+    "last_name": "Gautier",
+    "team": "finance",
+    "email": "elodie.gautier@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e087",
+    "first_name": "Rachid",
+    "last_name": "Clement",
+    "team": "finance",
+    "email": "rachid.clement@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e088",
+    "first_name": "Julie",
+    "last_name": "Lefebvre",
+    "team": "tech",
+    "email": "julie.lefebvre@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e089",
+    "first_name": "Karim",
+    "last_name": "Roux",
+    "team": "finance",
+    "email": "karim.roux@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e090",
+    "first_name": "Yasmine",
+    "last_name": "Lucas",
+    "team": "tech",
+    "email": "yasmine.lucas@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e091",
+    "first_name": "Emma",
+    "last_name": "Francois",
+    "team": "finance",
+    "email": "emma.francois@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e092",
+    "first_name": "Claire",
+    "last_name": "Marchand",
+    "team": "marketing",
+    "email": "claire.marchand@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e093",
+    "first_name": "Clara",
+    "last_name": "Blanchard",
+    "team": "tech",
+    "email": "clara.blanchard@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e094",
+    "first_name": "Élodie",
+    "last_name": "Boyer",
+    "team": "tech",
+    "email": "elodie.boyer@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e095",
+    "first_name": "Inès",
+    "last_name": "Mathieu",
+    "team": "marketing",
+    "email": "ines.mathieu@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e096",
+    "first_name": "Lucas",
+    "last_name": "Dubois",
+    "team": "marketing",
+    "email": "lucas.dubois@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e097",
+    "first_name": "Emma",
+    "last_name": "Riviere",
+    "team": "rh",
+    "email": "emma.riviere@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e098",
+    "first_name": "Aurélie",
+    "last_name": "Lucas",
+    "team": "tech",
+    "email": "aurelie.lucas@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e099",
+    "first_name": "Olivier",
+    "last_name": "Haddad",
+    "team": "marketing",
+    "email": "olivier.haddad@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e100",
+    "first_name": "Hugo",
+    "last_name": "Noel",
+    "team": "rh",
+    "email": "hugo.noel@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e101",
+    "first_name": "Léa",
+    "last_name": "Haddad",
+    "team": "finance",
+    "email": "lea.haddad@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e102",
+    "first_name": "Mélanie",
+    "last_name": "Dumont",
+    "team": "finance",
+    "email": "melanie.dumont@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e103",
+    "first_name": "Yasmine",
+    "last_name": "Lefebvre",
+    "team": "rh",
+    "email": "yasmine.lefebvre@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e104",
+    "first_name": "Jérôme",
+    "last_name": "Petit",
+    "team": "tech",
+    "email": "jerome.petit@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e105",
+    "first_name": "Anaïs",
+    "last_name": "Morin",
+    "team": "finance",
+    "email": "anais.morin@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e106",
+    "first_name": "Nicolas",
+    "last_name": "Mathieu",
+    "team": "tech",
+    "email": "nicolas.mathieu@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e107",
+    "first_name": "Marion",
+    "last_name": "Gaillard",
+    "team": "marketing",
+    "email": "marion.gaillard@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e108",
+    "first_name": "Lucas",
+    "last_name": "Joly",
+    "team": "finance",
+    "email": "lucas.joly@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e109",
+    "first_name": "Thomas",
+    "last_name": "Giraud",
+    "team": "tech",
+    "email": "thomas.giraud@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e110",
+    "first_name": "Julien",
+    "last_name": "Henry",
+    "team": "rh",
+    "email": "julien.henry@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e111",
+    "first_name": "Maxime",
+    "last_name": "Laurent",
+    "team": "tech",
+    "email": "maxime.laurent@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e112",
+    "first_name": "Guillaume",
+    "last_name": "Francois",
+    "team": "marketing",
+    "email": "guillaume.francois@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e113",
+    "first_name": "Olivier",
+    "last_name": "Dufour",
+    "team": "finance",
+    "email": "olivier.dufour@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e114",
+    "first_name": "Élodie",
+    "last_name": "Nicolas",
+    "team": "marketing",
+    "email": "elodie.nicolas@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e115",
+    "first_name": "Quentin",
+    "last_name": "Guerin",
+    "team": "tech",
+    "email": "quentin.guerin@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e116",
+    "first_name": "Aurélie",
+    "last_name": "Marie",
+    "team": "marketing",
+    "email": "aurelie.marie@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e117",
+    "first_name": "Maxime",
+    "last_name": "Marchand",
+    "team": "tech",
+    "email": "maxime.marchand@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e118",
+    "first_name": "Camille",
+    "last_name": "Lefebvre",
+    "team": "tech",
+    "email": "camille.lefebvre@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e119",
+    "first_name": "Samir",
+    "last_name": "Laurent",
+    "team": "tech",
+    "email": "samir.laurent@ma-place.example",
+    "persona": false
+  },
+  {
+    "id": "e120",
+    "first_name": "Manon",
+    "last_name": "Mercier",
+    "team": "finance",
+    "email": "manon.mercier@ma-place.example",
+    "persona": false
+  }
+]

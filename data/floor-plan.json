@@ -1,0 +1,582 @@
+{
+  "_proprietaire": "Services généraux. Ce fichier décrit le plan de l’étage : toute modification passe par eux (formulaire « Demande d’aménagement »), jamais par l’application.",
+  "etage": "3e étage",
+  "largeur": 1200,
+  "hauteur": 720,
+  "zones": [
+    {
+      "id": "finance",
+      "label": "Finance",
+      "x": 40,
+      "y": 290,
+      "w": 250,
+      "h": 250
+    },
+    {
+      "id": "rh",
+      "label": "RH",
+      "x": 310,
+      "y": 290,
+      "w": 160,
+      "h": 250
+    },
+    {
+      "id": "tech",
+      "label": "Tech",
+      "x": 490,
+      "y": 290,
+      "w": 390,
+      "h": 250
+    },
+    {
+      "id": "marketing",
+      "label": "Marketing",
+      "x": 900,
+      "y": 290,
+      "w": 260,
+      "h": 250
+    }
+  ],
+  "postes": [
+    {
+      "id": "F01",
+      "zone": "finance",
+      "x": 53,
+      "y": 360,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "F02",
+      "zone": "finance",
+      "x": 112,
+      "y": 360,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "F03",
+      "zone": "finance",
+      "x": 172,
+      "y": 360,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "F04",
+      "zone": "finance",
+      "x": 231,
+      "y": 360,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "F05",
+      "zone": "finance",
+      "x": 53,
+      "y": 420,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "F06",
+      "zone": "finance",
+      "x": 112,
+      "y": 420,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "F07",
+      "zone": "finance",
+      "x": 172,
+      "y": 420,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "F08",
+      "zone": "finance",
+      "x": 231,
+      "y": 420,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "F09",
+      "zone": "finance",
+      "x": 53,
+      "y": 480,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "F10",
+      "zone": "finance",
+      "x": 112,
+      "y": 480,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "F11",
+      "zone": "finance",
+      "x": 172,
+      "y": 480,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "F12",
+      "zone": "finance",
+      "x": 231,
+      "y": 480,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "H01",
+      "zone": "rh",
+      "x": 333,
+      "y": 348,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "H02",
+      "zone": "rh",
+      "x": 401,
+      "y": 348,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "H03",
+      "zone": "rh",
+      "x": 333,
+      "y": 396,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "H04",
+      "zone": "rh",
+      "x": 401,
+      "y": 396,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "H05",
+      "zone": "rh",
+      "x": 333,
+      "y": 444,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "H06",
+      "zone": "rh",
+      "x": 401,
+      "y": 444,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "H07",
+      "zone": "rh",
+      "x": 333,
+      "y": 492,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "H08",
+      "zone": "rh",
+      "x": 401,
+      "y": 492,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "T01",
+      "zone": "tech",
+      "x": 506,
+      "y": 360,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "T02",
+      "zone": "tech",
+      "x": 569,
+      "y": 360,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "T03",
+      "zone": "tech",
+      "x": 631,
+      "y": 360,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "T04",
+      "zone": "tech",
+      "x": 693,
+      "y": 360,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "T05",
+      "zone": "tech",
+      "x": 755,
+      "y": 360,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "T06",
+      "zone": "tech",
+      "x": 818,
+      "y": 360,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "T07",
+      "zone": "tech",
+      "x": 506,
+      "y": 420,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "T08",
+      "zone": "tech",
+      "x": 569,
+      "y": 420,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "T09",
+      "zone": "tech",
+      "x": 631,
+      "y": 420,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "T10",
+      "zone": "tech",
+      "x": 693,
+      "y": 420,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "T11",
+      "zone": "tech",
+      "x": 755,
+      "y": 420,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "T12",
+      "zone": "tech",
+      "x": 818,
+      "y": 420,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "T13",
+      "zone": "tech",
+      "x": 506,
+      "y": 480,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "T14",
+      "zone": "tech",
+      "x": 569,
+      "y": 480,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "T15",
+      "zone": "tech",
+      "x": 631,
+      "y": 480,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "T16",
+      "zone": "tech",
+      "x": 693,
+      "y": 480,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "T17",
+      "zone": "tech",
+      "x": 755,
+      "y": 480,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "T18",
+      "zone": "tech",
+      "x": 818,
+      "y": 480,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "M01",
+      "zone": "marketing",
+      "x": 915,
+      "y": 360,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "M02",
+      "zone": "marketing",
+      "x": 976,
+      "y": 360,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "M03",
+      "zone": "marketing",
+      "x": 1038,
+      "y": 360,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "M04",
+      "zone": "marketing",
+      "x": 1099,
+      "y": 360,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "M05",
+      "zone": "marketing",
+      "x": 915,
+      "y": 420,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "M06",
+      "zone": "marketing",
+      "x": 976,
+      "y": 420,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "M07",
+      "zone": "marketing",
+      "x": 1038,
+      "y": 420,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "M08",
+      "zone": "marketing",
+      "x": 1099,
+      "y": 420,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "M09",
+      "zone": "marketing",
+      "x": 915,
+      "y": 480,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "M10",
+      "zone": "marketing",
+      "x": 976,
+      "y": 480,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "M11",
+      "zone": "marketing",
+      "x": 1038,
+      "y": 480,
+      "w": 46,
+      "h": 30
+    },
+    {
+      "id": "M12",
+      "zone": "marketing",
+      "x": 1099,
+      "y": 480,
+      "w": 46,
+      "h": 30
+    }
+  ],
+  "salles": [
+    {
+      "id": "grand-salon",
+      "name": "Grand Salon",
+      "capacite": 12,
+      "equipements": [
+        "visio",
+        "ecran",
+        "tableau"
+      ],
+      "accessible": true,
+      "x": 40,
+      "y": 40,
+      "w": 260,
+      "h": 210
+    },
+    {
+      "id": "dordogne",
+      "name": "Dordogne",
+      "capacite": 10,
+      "equipements": [
+        "visio",
+        "ecran",
+        "tableau"
+      ],
+      "accessible": true,
+      "x": 310,
+      "y": 40,
+      "w": 210,
+      "h": 210
+    },
+    {
+      "id": "garonne",
+      "name": "Garonne",
+      "capacite": 8,
+      "equipements": [
+        "visio",
+        "ecran"
+      ],
+      "accessible": false,
+      "x": 530,
+      "y": 40,
+      "w": 180,
+      "h": 210
+    },
+    {
+      "id": "loire",
+      "name": "Loire",
+      "capacite": 6,
+      "equipements": [
+        "ecran"
+      ],
+      "accessible": true,
+      "x": 720,
+      "y": 40,
+      "w": 150,
+      "h": 210
+    },
+    {
+      "id": "seine",
+      "name": "Seine",
+      "capacite": 4,
+      "equipements": [
+        "visio",
+        "ecran"
+      ],
+      "accessible": false,
+      "x": 880,
+      "y": 40,
+      "w": 130,
+      "h": 100
+    },
+    {
+      "id": "rhone",
+      "name": "Rhône",
+      "capacite": 4,
+      "equipements": [
+        "ecran"
+      ],
+      "accessible": false,
+      "x": 880,
+      "y": 150,
+      "w": 130,
+      "h": 100
+    },
+    {
+      "id": "bulle-1",
+      "name": "Bulle 1",
+      "capacite": 2,
+      "equipements": [],
+      "accessible": false,
+      "x": 1020,
+      "y": 40,
+      "w": 140,
+      "h": 100
+    },
+    {
+      "id": "bulle-2",
+      "name": "Bulle 2",
+      "capacite": 2,
+      "equipements": [
+        "visio"
+      ],
+      "accessible": false,
+      "x": 1020,
+      "y": 150,
+      "w": 140,
+      "h": 100
+    }
+  ],
+  "decor": [
+    {
+      "label": "Cuisine",
+      "x": 40,
+      "y": 580,
+      "w": 360,
+      "h": 100
+    },
+    {
+      "label": "Accueil",
+      "x": 420,
+      "y": 580,
+      "w": 280,
+      "h": 100
+    },
+    {
+      "label": "Ascenseurs",
+      "x": 720,
+      "y": 580,
+      "w": 180,
+      "h": 100
+    },
+    {
+      "label": "Sanitaires",
+      "x": 920,
+      "y": 580,
+      "w": 240,
+      "h": 100
+    }
+  ]
+}
